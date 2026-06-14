@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel | Twins Spark</title>
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    :root {
+      --glass-bg: rgba(13, 13, 13, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+    .admin-page { padding-top: 8rem; padding-bottom: 4rem; }
+    .card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem; }
+    .input { width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 0.5rem; color: #fff; font-family: inherit; }
+    .input::placeholder { color: rgba(255,255,255,0.4); }
+    .btn { padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--glass-border); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+    .product-list { display: grid; gap: 1rem; }
+    .product-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 0.5rem; border: 1px solid var(--glass-border); }
+    .price-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.75rem; }
+    .media-item { position: relative; aspect-ratio: 1; background: rgba(0,0,0,0.3); border-radius: 0.5rem; border: 1px solid var(--glass-border); overflow: hidden; }
+    .media-item img, .media-item video { width: 100%; height: 100%; object-fit: cover; }
+    .media-remove { position: absolute; top: 0.25rem; right: 0.25rem; background: #ef4444; color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.75rem; }
+    .review-item { padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 0.5rem; border: 1px solid var(--glass-border); margin-bottom: 1rem; }
+    .stars { display: flex; gap: 0.25rem; }
+    .star { color: #333; cursor: pointer; font-size: 1.5rem; }
+    .star.active { color: var(--accent); }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .section-header h2 { margin: 0; }
+    .hidden { display: none !important; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.875rem; }
+    .help-text { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem; }
+  </style>
+</head>
+<body>
+  <!-- Original Preloader -->
+  <div id="preloader" class="preloader-container">
+    <div class="preloader-vignette" aria-hidden="true"></div>
+    <div class="preloader-inner">
+      <div class="preloader-logo-wrap">
+        <div class="preloader-glow" aria-hidden="true"></div>
+        <div class="miracle-flow-wrap">
+          <div class="miracle-mist miracle-mist-1" aria-hidden="true"></div>
+          <div class="miracle-mist miracle-mist-2" aria-hidden="true"></div>
+          <div class="miracle-light-core" aria-hidden="true"></div>
+          <img src="assets/logo.png" alt="Twins Spark" class="preloader-logo miracle-logo" />
+          <div class="miracle-particles" aria-hidden="true">
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stars" aria-hidden="true"></div>
+  <nav class="navbar glass" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="logo" aria-label="Twins Spark Home">
+        <img src="assets/logo.png" alt="Twins Spark" class="logo-img" />
+        <span class="logo-text">Twins Spark</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="admin-page">
+    <div class="container">
+      <!-- Login Section -->
+      <section id="login-section" class="card" style="max-width: 400px; margin: 0 auto;">
+        <h2 style="margin-bottom: 1.5rem; text-align: center;">Admin Login</h2>
+        <form id="login-form">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="username" class="input" placeholder="Enter username" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" class="input" placeholder="Enter password" required />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+          <p id="login-error" style="color: #ef4444; margin-top: 1rem; text-align: center; display: none;">Invalid credentials</p>
+        </form>
+      </section>
+
+      <!-- Admin Section (hidden by default) -->
+      <section id="admin-section" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <h1>Admin Panel</h1>
+          <button id="logout-btn" class="btn btn-secondary">Logout</button>
+        </div>
+
+        <!-- Add/Edit Product Form -->
+        <section class="card" style="margin-bottom: 2rem;">
+          <div class="section-header">
+            <h2 id="form-title">Add New Product</h2>
+            <button id="cancel-edit" class="btn btn-secondary hidden">Cancel</button>
+          </div>
+          <form id="product-form">
+            <input type="hidden" id="product-id" />
+            <div class="form-group">
+              <label>Product Name</label>
+              <input type="text" id="product-name" class="input" placeholder="Enter product name" required />
+            </div>
+            <div class="price-inputs">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label>Real Price (₹)</label>
+                <input type="text" id="product-real-price" class="input" placeholder="e.g., ₹3,999" required />
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label>Offer Price (₹)</label>
+                <input type="text" id="product-offer-price" class="input" placeholder="e.g., ₹2,999" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="product-category" class="input" required>
+                <option value="Gifts">Gifts</option>
+                <option value="Toys">Toys</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Clothing">Clothing</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="product-description" class="input" rows="3" placeholder="Enter product description"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Images (Max 6)</label>
+              <div class="media-grid" id="images-grid"></div>
+              <p class="help-text" id="images-help-text">Add up to 6 images</p>
+              <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <input type="text" id="image-url-input" class="input" placeholder="Image URL" style="flex: 1; min-width: 200px;" />
+                <input type="file" id="image-file-input" accept="image/*" style="display: none;" />
+                <button type="button" id="add-image-url" class="btn btn-secondary">Add URL</button>
+                <button type="button" id="add-image-file" class="btn btn-secondary">Upload Image</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Videos (Max 3)</label>
+              <div class="media-grid" id="videos-grid"></div>
+              <p class="help-text" id="videos-help-text">Add up to 3 videos</p>
+              <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <input type="text" id="video-url-input" class="input" placeholder="Video URL" style="flex: 1; min-width: 200px;" />
+                <input type="file" id="video-file-input" accept="video/*" style="display: none;" />
+                <button type="button" id="add-video-url" class="btn btn-secondary">Add URL</button>
+                <button type="button" id="add-video-file" class="btn btn-secondary">Upload Video</button>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0;">
+                <input type="checkbox" id="product-trending" />
+                <span>Trending Product</span>
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submit-btn">Add Product</button>
+          </form>
+        </section>
+
+        <!-- Product List -->
+        <section class="card">
+          <h2 style="margin-bottom: 1.5rem;">Product List</h2>
+          <div id="product-list" class="product-list"></div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer glass" style="margin-top: auto;">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo" aria-label="Twins Spark Home">
+            <img src="assets/logo.png" alt="Twins Spark" class="logo-img" />
+            <span class="logo-text">Twins Spark</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/icons.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Admin credentials (in real app, use proper auth)
+    const ADMIN_USERNAME = 'admin';
+    const ADMIN_PASSWORD = 'admin123';
+
+    // State
+    let products = [];
+    let tempImages = [];
+    let tempVideos = [];
+    let editingId = null;
+
+    // Limits
+    const MAX_IMAGES = 6;
+    const MAX_VIDEOS = 3;
+
+    // Load products from localStorage or use default
+    function loadProducts() {
+      const saved = localStorage.getItem('twinsSparkProducts');
+      if (saved) {
+        products = JSON.parse(saved);
+      } else {
+        products = window.PRODUCTS || [];
+      }
+      // Make sure all ids are numbers to avoid type mismatch
+      products = products.map(p => ({ ...p, id: Number(p.id) }));
+    }
+
+    // Save products to localStorage and sync with window.PRODUCTS
+    function saveProducts() {
+      localStorage.setItem('twinsSparkProducts', JSON.stringify(products));
+      window.PRODUCTS = products;
+    }
+
+    // Initialize
+    loadProducts();
+
+    // Login form
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('admin-section').classList.remove('hidden');
+        renderProductList();
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    });
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      document.getElementById('admin-section').classList.add('hidden');
+      document.getElementById('login-section').classList.remove('hidden');
+      loginForm.reset();
+      document.getElementById('login-error').style.display = 'none';
+    });
+
+    // File upload helpers
+    function readFileAsDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Update help text
+    function updateHelpText() {
+      const imagesHelpText = document.getElementById('images-help-text');
+      const videosHelpText = document.getElementById('videos-help-text');
+      
+      if (imagesHelpText) {
+        imagesHelpText.textContent = `Add up to ${MAX_IMAGES} images (${tempImages.length}/${MAX_IMAGES})`;
+      }
+      if (videosHelpText) {
+        videosHelpText.textContent = `Add up to ${MAX_VIDEOS} videos (${tempVideos.length}/${MAX_VIDEOS})`;
+      }
+    }
+
+    // Image handlers
+    document.getElementById('add-image-url').addEventListener('click', () => {
+      if (tempImages.length >= MAX_IMAGES) {
+        alert(`You can only add up to ${MAX_IMAGES} images`);
+        return;
+      }
+      const url = document.getElementById('image-url-input').value.trim();
+      if (url) {
+        tempImages.push({ type: 'url', src: url });
+        renderMediaGrid('images');
+        document.getElementById('image-url-input').value = '';
+        updateHelpText();
+      }
+    });
+
+    document.getElementById('add-image-file').addEventListener('click', () => {
+      if (tempImages.length >= MAX_IMAGES) {
+        alert(`You can only add up to ${MAX_IMAGES} images`);
+        return;
+      }
+      document.getElementById('image-file-input').click();
+    });
+
+    document.getElementById('image-file-input').addEventListener('change', async (e) => {
+      if (tempImages.length >= MAX_IMAGES) {
+        alert(`You can only add up to ${MAX_IMAGES} images`);
+        return;
+      }
+      const file = e.target.files[0];
+      if (file) {
+        const dataUrl = await readFileAsDataURL(file);
+        tempImages.push({ type: 'file', src: dataUrl });
+        renderMediaGrid('images');
+        e.target.value = '';
+        updateHelpText();
+      }
+    });
+
+    // Video handlers
+    document.getElementById('add-video-url').addEventListener('click', () => {
+      if (tempVideos.length >= MAX_VIDEOS) {
+        alert(`You can only add up to ${MAX_VIDEOS} videos`);
+        return;
+      }
+      const url = document.getElementById('video-url-input').value.trim();
+      if (url) {
+        tempVideos.push({ type: 'url', src: url });
+        renderMediaGrid('videos');
+        document.getElementById('video-url-input').value = '';
+        updateHelpText();
+      }
+    });
+
+    document.getElementById('add-video-file').addEventListener('click', () => {
+      if (tempVideos.length >= MAX_VIDEOS) {
+        alert(`You can only add up to ${MAX_VIDEOS} videos`);
+        return;
+      }
+      document.getElementById('video-file-input').click();
+    });
+
+    document.getElementById('video-file-input').addEventListener('change', async (e) => {
+      if (tempVideos.length >= MAX_VIDEOS) {
+        alert(`You can only add up to ${MAX_VIDEOS} videos`);
+        return;
+      }
+      const file = e.target.files[0];
+      if (file) {
+        const dataUrl = await readFileAsDataURL(file);
+        tempVideos.push({ type: 'file', src: dataUrl });
+        renderMediaGrid('videos');
+        e.target.value = '';
+        updateHelpText();
+      }
+    });
+
+    // Render media grid
+    function renderMediaGrid(type) {
+      const grid = document.getElementById(`${type}-grid`);
+      const items = type === 'images' ? tempImages : tempVideos;
+      grid.innerHTML = items.map((item, idx) => `
+        <div class="media-item">
+          ${type === 'images' 
+            ? `<img src="${item.src}" alt="Preview" />`
+            : `<video src="${item.src}" muted></video>`
+          }
+          <button class="media-remove" onclick="removeMedia('${type}', ${idx})">&times;</button>
+        </div>
+      `).join('');
+    }
+
+    window.removeMedia = function(type, idx) {
+      if (type === 'images') {
+        tempImages.splice(idx, 1);
+        renderMediaGrid('images');
+      } else {
+        tempVideos.splice(idx, 1);
+        renderMediaGrid('videos');
+      }
+      updateHelpText();
+    }
+
+    // Product form
+    const productForm = document.getElementById('product-form');
+    productForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const product = {
+        id: editingId || Date.now(),
+        name: document.getElementById('product-name').value,
+        realPrice: document.getElementById('product-real-price').value,
+        offerPrice: document.getElementById('product-offer-price').value,
+        category: document.getElementById('product-category').value,
+        description: document.getElementById('product-description').value,
+        images: [...tempImages],
+        videos: [...tempVideos],
+        trending: document.getElementById('product-trending').checked,
+        reviews: editingId ? products.find(p => p.id === editingId)?.reviews || [] : []
+      };
+
+      if (editingId) {
+        const idx = products.findIndex(p => p.id === editingId);
+        if (idx !== -1) products[idx] = product;
+      } else {
+        products.push(product);
+      }
+
+      saveProducts();
+      renderProductList();
+      resetForm();
+    });
+
+    function resetForm() {
+      productForm.reset();
+      tempImages = [];
+      tempVideos = [];
+      editingId = null;
+      document.getElementById('form-title').textContent = 'Add New Product';
+      document.getElementById('submit-btn').textContent = 'Add Product';
+      document.getElementById('cancel-edit').classList.add('hidden');
+      renderMediaGrid('images');
+      renderMediaGrid('videos');
+      updateHelpText();
+    }
+
+    document.getElementById('cancel-edit').addEventListener('click', resetForm);
+
+    // Render product list
+    function renderProductList() {
+      const list = document.getElementById('product-list');
+      list.innerHTML = products.map(p => `
+        <div class="product-item" data-product-id="${p.id}">
+          <div>
+            <h3 style="margin: 0 0 0.25rem 0;">${p.name}</h3>
+            <p style="margin: 0; color: rgba(255,255,255,0.6); font-size: 0.875rem;">${p.category} • ${p.offerPrice}</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary" data-action="edit">Edit</button>
+            <button class="btn btn-danger" data-action="delete">Delete</button>
+          </div>
+        </div>
+      `).join('');
+
+      // Add event listeners
+      list.querySelectorAll('.product-item').forEach(item => {
+        const id = Number(item.dataset.productId);
+        item.querySelector('[data-action="edit"]').addEventListener('click', () => editProduct(id));
+        item.querySelector('[data-action="delete"]').addEventListener('click', () => deleteProduct(id));
+      });
+    }
+
+    function editProduct(id) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      editingId = id;
+      document.getElementById('product-id').value = id;
+      document.getElementById('product-name').value = product.name;
+      document.getElementById('product-real-price').value = product.realPrice;
+      document.getElementById('product-offer-price').value = product.offerPrice;
+      document.getElementById('product-category').value = product.category;
+      document.getElementById('product-description').value = product.description || '';
+      document.getElementById('product-trending').checked = !!product.trending;
+
+      tempImages = product.images || [];
+      tempVideos = product.videos || [];
+      renderMediaGrid('images');
+      renderMediaGrid('videos');
+      updateHelpText();
+
+      document.getElementById('form-title').textContent = 'Edit Product';
+      document.getElementById('submit-btn').textContent = 'Save Changes';
+      document.getElementById('cancel-edit').classList.remove('hidden');
+    }
+
+    function deleteProduct(id) {
+      if (confirm('Are you sure you want to delete this product?')) {
+        products = products.filter(p => p.id !== id);
+        saveProducts();
+        renderProductList();
+      }
+    }
+
+    // Icons
+    document.querySelectorAll('[data-icon]').forEach(el => {
+      const name = el.getAttribute('data-icon');
+      if (window.ICONS && window.ICONS[name]) el.innerHTML = window.ICONS[name];
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Detail | Twins Spark</title>
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    :root {
+      --glass-bg: rgba(13, 13, 13, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+    .product-detail-page { padding-top: 8rem; padding-bottom: 4rem; }
+    .card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem; }
+    .product-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+    @media (min-width: 768px) {
+      .product-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .media-gallery { display: flex; flex-direction: column; gap: 1rem; }
+    .main-media { aspect-ratio: 4/3; background: rgba(0,0,0,0.3); border-radius: 1rem; border: 1px solid var(--glass-border); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .main-media img, .main-media video { width: 100%; height: 100%; object-fit: contain; }
+    .thumbnails { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.5rem; }
+    .thumbnail { aspect-ratio: 1; background: rgba(0,0,0,0.3); border-radius: 0.5rem; border: 1px solid var(--glass-border); cursor: pointer; overflow: hidden; }
+    .thumbnail.active { border-color: var(--accent); }
+    .thumbnail img, .thumbnail video { width: 100%; height: 100%; object-fit: cover; }
+    .price-display { display: flex; gap: 1rem; align-items: baseline; }
+    .real-price { text-decoration: line-through; color: rgba(255,255,255,0.5); }
+    .offer-price { font-size: 2rem; font-weight: 700; color: var(--accent); }
+    .btn { padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--glass-border); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+    .btn-secondary.active { background: rgba(255, 193, 7, 0.2); border-color: var(--accent); }
+    .rating { display: flex; gap: 0.25rem; font-size: 1.25rem; }
+    .rating .star { color: #333; }
+    .rating .star.filled { color: var(--accent); }
+    .review-list { display: grid; gap: 1.5rem; margin-top: 1.5rem; }
+    .review-item { padding: 1.25rem; background: rgba(0,0,0,0.2); border-radius: 0.75rem; border: 1px solid var(--glass-border); }
+    .review-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+    .review-author { font-weight: 600; }
+    .review-date { color: rgba(255,255,255,0.5); font-size: 0.875rem; }
+    .review-media { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+    .review-media-item { aspect-ratio: 1; background: rgba(0,0,0,0.3); border-radius: 0.5rem; border: 1px solid var(--glass-border); overflow: hidden; }
+    .review-media-item img, .review-media-item video { width: 100%; height: 100%; object-fit: cover; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.875rem; }
+    .input { width: 100%; padding: 0.75rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 0.5rem; color: #fff; font-family: inherit; }
+    .input::placeholder { color: rgba(255,255,255,0.4); }
+    textarea.input { resize: vertical; min-height: 100px; }
+    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.5rem; }
+    .media-item { position: relative; aspect-ratio: 1; background: rgba(0,0,0,0.3); border-radius: 0.5rem; border: 1px solid var(--glass-border); overflow: hidden; }
+    .media-item img, .media-item video { width: 100%; height: 100%; object-fit: cover; }
+    .media-remove { position: absolute; top: 0.25rem; right: 0.25rem; background: #ef4444; color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.75rem; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <!-- Preloader -->
+  <div id="preloader" class="preloader-container">
+    <div class="preloader-vignette" aria-hidden="true"></div>
+    <div class="preloader-inner">
+      <div class="preloader-logo-wrap">
+        <div class="preloader-glow" aria-hidden="true"></div>
+        <div class="miracle-flow-wrap">
+          <div class="miracle-mist miracle-mist-1" aria-hidden="true"></div>
+          <div class="miracle-mist miracle-mist-2" aria-hidden="true"></div>
+          <div class="miracle-light-core" aria-hidden="true"></div>
+          <img src="assets/logo.png" alt="Twins Spark" class="preloader-logo miracle-logo" />
+          <div class="miracle-particles" aria-hidden="true">
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stars" aria-hidden="true"></div>
+  <nav class="navbar glass" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="logo" aria-label="Twins Spark Home">
+        <img src="assets/logo.png" alt="Twins Spark" class="logo-img" />
+        <span class="logo-text">Twins Spark</span>
+      </a>
+      <div class="nav-links">
+        <a href="gifts.html">Gifts</a>
+        <a href="toys.html">Toys</a>
+        <a href="accessories.html">Accessories</a>
+        <a href="clothing.html">Clothing</a>
+      </div>
+      <div class="nav-actions">
+        <button type="button" class="icon-btn" data-search-toggle aria-label="Search">
+          <span data-icon="search"></span>
+        </button>
+        <a href="wishlist.html" class="icon-btn" aria-label="Wishlist">
+          <span data-icon="heart"></span>
+          <span class="cart-badge" data-wishlist-count>0</span>
+        </a>
+        <button type="button" class="icon-btn cart-btn" aria-label="Shopping cart">
+          <span data-icon="cart"></span>
+          <span class="cart-badge" data-cart-count>0</span>
+        </button>
+        <button type="button" class="icon-btn menu-btn" id="menu-toggle" aria-label="Open menu">
+          <span data-icon="menu"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="mobile-menu-overlay" class="mobile-menu-overlay" aria-hidden="true"></div>
+  <aside id="mobile-menu" class="mobile-menu glass-premium" aria-hidden="true">
+    <button type="button" id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
+      <span data-icon="close"></span>
+    </button>
+    <nav>
+      <a href="gifts.html">Gifts</a>
+      <a href="toys.html">Toys</a>
+      <a href="accessories.html">Accessories</a>
+      <a href="clothing.html">Clothing</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </aside>
+
+  <main class="product-detail-page">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <div style="margin-bottom: 2rem;">
+        <a href="index.html" style="color: var(--accent); text-decoration: none;">← Back to Home</a>
+      </div>
+
+      <section id="product-not-found" class="card hidden">
+        <h2>Product Not Found</h2>
+        <p>The product you're looking for doesn't exist.</p>
+        <a href="index.html" class="btn btn-primary" style="display: inline-block; margin-top: 1rem;">Go Home</a>
+      </section>
+
+      <section id="product-detail" class="hidden">
+        <div class="product-grid">
+          <!-- Media Gallery -->
+          <div class="media-gallery">
+            <div class="main-media" id="main-media">
+              <img src="" alt="Product" id="main-image" />
+              <video src="" id="main-video" class="hidden" controls></video>
+            </div>
+            <div class="thumbnails" id="thumbnails"></div>
+          </div>
+
+          <!-- Product Info -->
+          <div class="card">
+            <h1 id="product-name" style="margin-bottom: 1rem; font-size: 2.5rem;"></h1>
+            <div class="rating" id="product-rating" style="margin-bottom: 1rem;"></div>
+            <div class="price-display" style="margin-bottom: 1.5rem;">
+              <span class="real-price" id="real-price"></span>
+              <span class="offer-price" id="offer-price"></span>
+            </div>
+            <p id="product-description" style="margin-bottom: 2rem; color: rgba(255,255,255,0.8); line-height: 1.7;"></p>
+            <div style="display: flex; gap: 1rem;">
+              <button class="btn btn-primary" id="add-to-cart">Add to Cart</button>
+              <button class="btn btn-secondary" id="add-to-wishlist">Add to Wishlist</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <section class="card" style="margin-top: 3rem;">
+          <h2 style="margin-bottom: 1.5rem;">Customer Reviews</h2>
+          
+          <!-- Add Review Form -->
+          <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--glass-border);">
+            <h3 style="margin-bottom: 1rem;">Write a Review</h3>
+            <form id="review-form">
+              <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="review-name" class="input" placeholder="Enter your name" required />
+              </div>
+              <div class="form-group">
+                <label>Rating</label>
+                <div class="rating" id="rating-input">
+                  <span class="star" data-value="1">★</span>
+                  <span class="star" data-value="2">★</span>
+                  <span class="star" data-value="3">★</span>
+                  <span class="star" data-value="4">★</span>
+                  <span class="star" data-value="5">★</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Your Review</label>
+                <textarea id="review-text" class="input" placeholder="Write your review here..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label>Photos/Videos (Optional)</label>
+                <div class="media-grid" id="review-media-grid"></div>
+                <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                  <input type="file" id="review-media-input" accept="image/*,video/*" style="display: none;" multiple />
+                  <button type="button" id="add-review-media" class="btn btn-secondary">Add Media</button>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+          </div>
+
+          <!-- Reviews List -->
+          <div id="reviews-list" class="review-list"></div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer glass" style="margin-top: auto;">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo" aria-label="Twins Spark Home">
+            <img src="assets/logo.png" alt="Twins Spark" class="logo-img" />
+            <span class="logo-text">Twins Spark</span>
+          </a>
+          <p>
+            Elevating the ordinary into the extraordinary with cosmic-inspired gifts,
+            accessories, and apparel.
+          </p>
+        </div>
+        <div>
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="gifts.html">Gifts</a></li>
+            <li><a href="toys.html">Toys</a></li>
+            <li><a href="accessories.html">Accessories</a></li>
+            <li><a href="clothing.html">Clothing</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="shipping.html">Shipping</a></li>
+            <li><a href="returns.html">Returns</a></li>
+            <li><a href="admin.html">Admin Panel</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Email"><span data-icon="mail"></span></a>
+            <a href="#" aria-label="Website"><span data-icon="globe"></span></a>
+            <a href="#" aria-label="Share"><span data-icon="share"></span></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copy">
+        <p>&copy; <span data-year></span> Twins Spark. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/icons.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // State
+    let products = [];
+    let currentProduct = null;
+    let selectedRating = 0;
+    let reviewMedia = [];
+    let currentMediaIndex = 0;
+    let allMedia = [];
+
+    // Load products from localStorage or use default
+    function loadProducts() {
+      const saved = localStorage.getItem('twinsSparkProducts');
+      products = saved ? JSON.parse(saved) : window.PRODUCTS;
+      // Make sure window.PRODUCTS is updated too
+      window.PRODUCTS = products;
+    }
+
+    // Save products to localStorage
+    function saveProducts() {
+      localStorage.setItem('twinsSparkProducts', JSON.stringify(products));
+      window.PRODUCTS = products;
+    }
+
+    // Get product ID from URL
+    function getProductId() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      return id ? parseInt(id) : null;
+    }
+
+    // Render stars
+    function renderStars(rating) {
+      let stars = '';
+      for (let i = 1; i <= 5; i++) {
+        stars += `<span class="star ${i <= rating ? 'filled' : ''}">★</span>`;
+      }
+      return stars;
+    }
+
+    // Initialize product detail
+    function initProductDetail() {
+      loadProducts();
+      const productId = getProductId();
+      currentProduct = products.find(p => p.id === productId);
+
+      if (!currentProduct) {
+        document.getElementById('product-detail').classList.add('hidden');
+        document.getElementById('product-not-found').classList.remove('hidden');
+        return;
+      }
+
+      // All media (images + videos)
+      allMedia = [
+        ...(currentProduct.images || []).map(m => ({ ...m, type: 'image' })),
+        ...(currentProduct.videos || []).map(m => ({ ...m, type: 'video' }))
+      ];
+
+      document.getElementById('product-name').textContent = currentProduct.name;
+      document.getElementById('real-price').textContent = currentProduct.realPrice;
+      document.getElementById('offer-price').textContent = currentProduct.offerPrice;
+      document.getElementById('product-description').textContent = currentProduct.description || 'No description available';
+
+      // Average rating
+      const reviews = currentProduct.reviews || [];
+      const avgRating = reviews.length 
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length 
+        : 0;
+      document.getElementById('product-rating').innerHTML = renderStars(Math.round(avgRating)) + ` (${reviews.length} reviews)`;
+
+      // Media gallery
+      renderMediaGallery();
+
+      // Reviews
+      renderReviews();
+
+      // Update wishlist button state
+      updateWishlistButton();
+
+      document.getElementById('product-detail').classList.remove('hidden');
+      document.getElementById('product-not-found').classList.add('hidden');
+    }
+
+    function renderMediaGallery() {
+      const mainImage = document.getElementById('main-image');
+      const mainVideo = document.getElementById('main-video');
+      const thumbnailsDiv = document.getElementById('thumbnails');
+
+      if (allMedia.length === 0) {
+        mainImage.src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23000000" width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="%23666" font-family="sans-serif" font-size="20">No Media</text></svg>');
+        mainImage.classList.remove('hidden');
+        mainVideo.classList.add('hidden');
+        thumbnailsDiv.innerHTML = '';
+        return;
+      }
+
+      // Show first media
+      showMedia(0);
+
+      // Thumbnails
+      thumbnailsDiv.innerHTML = allMedia.map((media, idx) => `
+        <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="showMedia(${idx})">
+          ${media.type === 'image' 
+            ? `<img src="${media.src}" alt="Thumbnail" />`
+            : `<video src="${media.src}" muted></video>`
+          }
+        </div>
+      `).join('');
+    }
+
+    window.showMedia = function(idx) {
+      currentMediaIndex = idx;
+      const media = allMedia[idx];
+      const mainImage = document.getElementById('main-image');
+      const mainVideo = document.getElementById('main-video');
+      const thumbnails = document.querySelectorAll('.thumbnail');
+
+      thumbnails.forEach((t, i) => t.classList.toggle('active', i === idx));
+
+      if (media.type === 'image') {
+        mainImage.src = media.src;
+        mainImage.classList.remove('hidden');
+        mainVideo.classList.add('hidden');
+        mainVideo.pause();
+      } else {
+        mainVideo.src = media.src;
+        mainVideo.classList.remove('hidden');
+        mainImage.classList.add('hidden');
+      }
+    };
+
+    // Render reviews
+    function renderReviews() {
+      const reviews = currentProduct.reviews || [];
+      const list = document.getElementById('reviews-list');
+
+      if (reviews.length === 0) {
+        list.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">No reviews yet. Be the first to review this product!</p>';
+        return;
+      }
+
+      list.innerHTML = reviews.map(review => `
+        <div class="review-item">
+          <div class="review-meta">
+            <span class="review-author">${review.name}</span>
+            <span class="review-date">${review.date}</span>
+          </div>
+          <div class="rating" style="margin-bottom: 0.75rem;">${renderStars(review.rating)}</div>
+          <p style="margin: 0; color: rgba(255,255,255,0.85); line-height: 1.7;">${review.text}</p>
+          ${(review.photos || []).length > 0 || (review.videos || []).length > 0 ? `
+            <div class="review-media">
+              ${(review.photos || []).map(photo => `
+                <div class="review-media-item">
+                  <img src="${photo.src}" alt="Review photo" />
+                </div>
+              `).join('')}
+              ${(review.videos || []).map(video => `
+                <div class="review-media-item">
+                  <video src="${video.src}" controls></video>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    // Rating input
+    const ratingInput = document.getElementById('rating-input');
+    const ratingStars = ratingInput.querySelectorAll('.star');
+
+    ratingStars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.dataset.value);
+        updateRatingInput();
+      });
+      star.addEventListener('mouseover', () => {
+        const val = parseInt(star.dataset.value);
+        ratingStars.forEach((s, i) => s.classList.toggle('filled', i < val));
+      });
+    });
+
+    ratingInput.addEventListener('mouseleave', updateRatingInput);
+
+    function updateRatingInput() {
+      ratingStars.forEach((s, i) => s.classList.toggle('filled', i < selectedRating));
+    }
+
+    // Review media
+    function readFileAsDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    document.getElementById('add-review-media').addEventListener('click', () => {
+      document.getElementById('review-media-input').click();
+    });
+
+    document.getElementById('review-media-input').addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files);
+      for (const file of files) {
+        const dataUrl = await readFileAsDataURL(file);
+        const isImage = file.type.startsWith('image/');
+        reviewMedia.push({ type: isImage ? 'image' : 'video', src: dataUrl });
+      }
+      renderReviewMediaGrid();
+      e.target.value = '';
+    });
+
+    function renderReviewMediaGrid() {
+      const grid = document.getElementById('review-media-grid');
+      grid.innerHTML = reviewMedia.map((item, idx) => `
+        <div class="media-item">
+          ${item.type === 'image' 
+            ? `<img src="${item.src}" alt="Preview" />`
+            : `<video src="${item.src}" muted></video>`
+          }
+          <button class="media-remove" onclick="removeReviewMedia(${idx})">&times;</button>
+        </div>
+      `).join('');
+    }
+
+    window.removeReviewMedia = function(idx) {
+      reviewMedia.splice(idx, 1);
+      renderReviewMediaGrid();
+    };
+
+    // Review form
+    const reviewForm = document.getElementById('review-form');
+    reviewForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (selectedRating === 0) {
+        alert('Please select a rating');
+        return;
+      }
+
+      const review = {
+        id: Date.now(),
+        name: document.getElementById('review-name').value,
+        rating: selectedRating,
+        text: document.getElementById('review-text').value,
+        date: new Date().toLocaleDateString('en-IN'),
+        photos: reviewMedia.filter(m => m.type === 'image'),
+        videos: reviewMedia.filter(m => m.type === 'video')
+      };
+
+      currentProduct.reviews = currentProduct.reviews || [];
+      currentProduct.reviews.unshift(review);
+
+      // Update products
+      const idx = products.findIndex(p => p.id === currentProduct.id);
+      if (idx !== -1) products[idx] = currentProduct;
+      saveProducts();
+
+      // Reset form
+      reviewForm.reset();
+      selectedRating = 0;
+      reviewMedia = [];
+      updateRatingInput();
+      renderReviewMediaGrid();
+
+      // Re-render
+      initProductDetail();
+    });
+
+    // Add to cart/wishlist
+    document.getElementById('add-to-cart').addEventListener('click', () => {
+      if (window.addToCart && currentProduct) {
+        window.addToCart(currentProduct.id);
+      }
+    });
+
+    function updateWishlistButton() {
+      const btn = document.getElementById('add-to-wishlist');
+      if (window.wishlist && currentProduct) {
+        const isInWishlist = window.wishlist.has(currentProduct.id);
+        btn.textContent = isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist';
+        btn.classList.toggle('active', isInWishlist);
+      }
+    }
+
+    document.getElementById('add-to-wishlist').addEventListener('click', () => {
+      if (window.toggleWishlist && currentProduct) {
+        window.toggleWishlist(currentProduct.id);
+        updateWishlistButton();
+        // Update wishlist badge in navbar
+        if (window.updateWishlistBadge) {
+          window.updateWishlistBadge();
+        }
+      }
+    });
+
+    // Icons
+    document.querySelectorAll('[data-icon]').forEach(el => {
+      const name = el.getAttribute('data-icon');
+      if (window.ICONS && window.ICONS[name]) el.innerHTML = window.ICONS[name];
+    });
+
+    // Initialize
+    initProductDetail();
+  </script>
+</body>
+</html>

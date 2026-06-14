@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Twins Spark | Premium Gifts & Accessories</title>
+  <meta name="description" content="Discover valuable gifts, accessories, toys, and clothing in our cosmic boutique." />
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="page-home">
+  <!-- Preloader -->
+  <div id="preloader" class="preloader-container">
+    <div class="preloader-vignette" aria-hidden="true"></div>
+    <div class="preloader-inner">
+      <div class="preloader-logo-wrap">
+        <div class="preloader-glow" aria-hidden="true"></div>
+        <div class="miracle-flow-wrap">
+          <div class="miracle-mist miracle-mist-1" aria-hidden="true"></div>
+          <div class="miracle-mist miracle-mist-2" aria-hidden="true"></div>
+          <div class="miracle-light-core" aria-hidden="true"></div>
+          <img src="assets/logo.png" alt="Twins Spark" class="preloader-logo miracle-logo" />
+          <div class="miracle-particles" aria-hidden="true">
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+            <span class="m-particle"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cosmic background -->
+  <div class="stars" aria-hidden="true"></div>
+  <div id="smoke-container" class="smoke-container" aria-hidden="true">
+    <div class="smoke-blob smoke-blob-1"></div>
+    <div class="smoke-blob smoke-blob-2"></div>
+    <div id="smoke-particles"></div>
+    <div class="smoke-noise-overlay"></div>
+    <svg class="hidden" aria-hidden="true">
+      <filter id="active-smoke-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2">
+          <animate attributeName="seed" from="1" to="100" dur="120s" repeatCount="indefinite" />
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" scale="100" />
+      </filter>
+    </svg>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar glass" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="logo" aria-label="Twins Spark Home">
+        <img src="assets/logo.png" alt="Twins Spark" class="logo-img" />
+        <span class="logo-text">Twins Spark</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="gifts.html">Gifts</a>
+        <a href="toys.html">Toys</a>
+        <a href="accessories.html">Accessories</a>
+        <a href="clothing.html">Clothing</a>
+      </div>
+
+      <div class="nav-actions">
+        <button type="button" class="icon-btn" data-search-toggle aria-label="Search">
+          <span data-icon="search"></span>
+        </button>
+        <button type="button" class="icon-btn cart-btn" aria-label="Shopping cart">
+          <span data-icon="cart"></span>
+          <span class="cart-badge" data-cart-count>0</span>
+        </button>
+        <button type="button" class="icon-btn menu-btn" id="menu-toggle" aria-label="Open menu">
+          <span data-icon="menu"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu-overlay" class="mobile-menu-overlay" aria-hidden="true"></div>
+  <aside id="mobile-menu" class="mobile-menu glass-premium" aria-hidden="true">
+    <button type="button" id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
+      <span data-icon="close"></span>
+    </button>
+    <nav>
+      <a href="gifts.html">Gifts</a>
+      <a href="toys.html">Toys</a>
+      <a href="accessories.html">Accessories</a>
+      <a href="clothing.html">Clothing</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </aside>
+
+  <main>
+    <!-- Hero 1: brand + categories -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container hero-container">
+        <div class="hero-content-left">
+          <div class="hero-badge glass">
+            <span class="icon-accent" data-icon="sparkles" style="width:16px;height:16px;display:inline-flex"></span>
+            <span>New Collection Arrived</span>
+          </div>
+
+          <h1 id="hero-heading">Spark Your <span class="text-gradient">Universe</span></h1>
+
+          <p class="hero-sub">
+            Discover a curated collection of valuable gifts, premium accessories,
+            and exclusive toys. Elevate your lifestyle with Twins Spark.
+          </p>
+
+          <div class="hero-categories" role="navigation" aria-label="Shop by category">
+            <a href="gifts.html" class="hero-category-card glass">
+              <div class="card-bg gifts">GIFTS</div>
+              <div class="card-content">
+                <h3>Gifts</h3>
+                <p>Elegance in every detail</p>
+                <span class="card-arrow">Shop Gifts →</span>
+              </div>
+            </a>
+
+            <a href="toys.html" class="hero-category-card glass">
+              <div class="card-bg toys">TOYS</div>
+              <div class="card-content">
+                <h3>Toys</h3>
+                <p>Play among the stars</p>
+                <span class="card-arrow">Shop Toys →</span>
+              </div>
+            </a>
+
+            <a href="accessories.html" class="hero-category-card glass">
+              <div class="card-bg accessories">ACCESSORIES</div>
+              <div class="card-content">
+                <h3>Accessories</h3>
+                <p>Complete your cosmic look</p>
+                <span class="card-arrow">Shop Accessories →</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="hero-logo-right">
+          <img src="assets/logo.png" alt="Twins Spark Logo" class="logo-img-lg floating-logo" aria-hidden="false" />
+        </div>
+      </div>
+
+      <div class="hero-glow-main" aria-hidden="true"></div>
+      <div class="hero-glow-secondary" aria-hidden="true"></div>
+    </section>
+
+    <!-- Hero 2: trending products -->
+    <section class="hero-trending" aria-labelledby="trending-heading">
+      <div class="hero-trending-glow" aria-hidden="true"></div>
+      <div class="container hero-trending-inner">
+        <div class="section-header">
+          <div>
+            <h2 id="trending-heading">Trending Products</h2>
+            <p>Handpicked bestsellers flying off the cosmic shelves.</p>
+          </div>
+        </div>
+        <div id="trending-grid" class="product-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer glass">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo" aria-label="Twins Spark Home">
+            <img src="assets/logo.png" alt="Twins Spark" class="logo-img" />
+            <span class="logo-text">Twins Spark</span>
+          </a>
+          <p>
+            Elevating the ordinary into the extraordinary with cosmic-inspired gifts,
+            accessories, and apparel.
+          </p>
+        </div>
+
+        <div>
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="gifts.html">Gifts</a></li>
+            <li><a href="toys.html">Toys</a></li>
+            <li><a href="accessories.html">Accessories</a></li>
+            <li><a href="clothing.html">Clothing</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="shipping.html">Shipping</a></li>
+            <li><a href="returns.html">Returns</a></li>
+            <li><a href="admin.html">Admin Panel</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Connect</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Email"><span data-icon="mail"></span></a>
+            <a href="#" aria-label="Website"><span data-icon="globe"></span></a>
+            <a href="#" aria-label="Share"><span data-icon="share"></span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-copy">
+        <p>&copy; <span data-year></span> Twins Spark. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/icons.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.querySelectorAll('[data-icon]').forEach(function (el) {
+      var name = el.getAttribute('data-icon');
+      if (window.ICONS && window.ICONS[name]) el.innerHTML = window.ICONS[name];
+    });
+  </script>
+</body>
+</html>
