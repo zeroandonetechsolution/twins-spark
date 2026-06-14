@@ -306,29 +306,85 @@ textarea {
     transform: translateX(-50%) translateY(-20px) scale(1);
   }
 }
-/* Simplified logo animation */
+/* ── Enhanced Preloader ─────────────────────────────────────────────── */
+
 .miracle-logo {
   position: relative;
   z-index: 5;
   width: 180px;
   height: auto;
-  animation: logo-materialize 1.2s ease-out forwards;
-  filter: blur(10px);
   opacity: 0;
+  /* Upward wipe reveal + brightness fade + subtle zoom */
+  animation: logo-full-reveal 3.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
-@keyframes logo-materialize {
+
+/* Light sweep overlay for golden shine */
+.miracle-logo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 223, 130, 0.8) 40%,
+    rgba(212, 175, 55, 0.6) 50%,
+    rgba(255, 223, 130, 0.8) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+  animation: light-sweep 1.2s ease-out forwards;
+  animation-delay: 1.4s;
+}
+
+@keyframes logo-full-reveal {
   0% {
     opacity: 0;
-    filter: blur(10px) brightness(0.5);
-    transform: scale(0.9);
+    transform: scale(1.15);
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    filter: blur(20px) brightness(0);
+  }
+  30% {
+    opacity: 0.3;
+    filter: blur(10px) brightness(0.3);
+  }
+  55% {
+    clip-path: polygon(0 100%, 100% 100%, 100% 0%, 0 0%);
+    opacity: 0.7;
+    filter: blur(2px) brightness(0.7);
+    transform: scale(1.05);
+  }
+  85% {
+    opacity: 1;
+    filter: blur(0) brightness(1) drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+    transform: scale(1.02);
   }
   100% {
     opacity: 1;
-    filter: blur(0px) brightness(1) drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
+    clip-path: polygon(0 100%, 100% 100%, 100% 0%, 0 0%);
+    filter: blur(0) brightness(1) drop-shadow(0 0 30px rgba(212, 175, 55, 0.8));
     transform: scale(1);
   }
 }
-/* Simplified sparkles - fewer particles */
+
+@keyframes light-sweep {
+  0% { left: -100%; }
+  100% { left: 150%; }
+}
+
+/* Soft vignette for cinematic feel */
+.preloader-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(3, 3, 3, 0.95) 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Miracle particles */
 .miracle-particles {
   position: absolute;
   inset: -30px;
@@ -345,15 +401,10 @@ textarea {
   box-shadow: 0 0 6px rgba(212, 175, 55, 0.6);
   animation: sparkle-rise 2s ease-in-out infinite;
 }
-/* Position sparkles around logo edges - 4 particles instead of 8 */
 .miracle-particles .m-particle:nth-child(1) { top: -15px; left: 20px; animation-delay: 0.3s; }
 .miracle-particles .m-particle:nth-child(2) { top: 10px; right: -5px; animation-delay: 0.6s; }
 .miracle-particles .m-particle:nth-child(3) { bottom: 10px; right: 20px; animation-delay: 0.9s; }
 .miracle-particles .m-particle:nth-child(4) { bottom: -15px; left: 10px; animation-delay: 1.2s; }
-/* Hide extra particles */
-.miracle-particles .m-particle:nth-child(n+5) {
-  display: none;
-}
 @keyframes sparkle-rise {
   0% { 
     opacity: 0; 
