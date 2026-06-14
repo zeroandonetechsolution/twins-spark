@@ -1465,3 +1465,11 @@ textarea.input {
 }
 
 .hidden { display: none !important; }
+
+.powered-by-text {
+  color: var(--accent);
+  font-weight: 600;
+  background: rgba(212, 175, 55, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
