@@ -339,27 +339,7 @@ textarea {
   border-radius: 0 !important;
 }
 
-/* Light sweep overlay for golden shine */
-.miracle-logo-wrapper::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(255, 223, 130, 0.9) 40%,
-    rgba(212, 175, 55, 0.7) 50%,
-    rgba(255, 223, 130, 0.9) 60%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 10;
-  animation: light-sweep 1.4s ease-out forwards;
-  animation-delay: 1.6s;
-}
+
 
 @keyframes logo-full-reveal {
   0% {
@@ -388,10 +368,7 @@ textarea {
   }
 }
 
-@keyframes light-sweep {
-  0% { left: -100%; }
-  100% { left: 180%; }
-}
+
 
 /* Soft vignette for cinematic feel */
 .preloader-vignette {
