@@ -862,6 +862,11 @@ textarea.input {
   will-change: transform;
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
 .hero-content {
   position: relative;
   z-index: 10;
