@@ -270,6 +270,13 @@ textarea {
   animation: miracle-mist-rise 5s ease-in-out infinite;
   animation-delay: 1.5s;
 }
+.miracle-mist-3 {
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, transparent 70%);
+  top: 5%;
+  right: 10%;
+  animation: miracle-mist-rise 5.5s ease-in-out infinite;
+  animation-delay: 0.8s;
+}
 @keyframes miracle-mist-rise {
   0% {
     opacity: 0;
