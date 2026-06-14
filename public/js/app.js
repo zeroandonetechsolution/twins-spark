@@ -311,8 +311,7 @@
     loadWishlist();
     loadProducts();
     initPreloader();
-    // Disable smoke effects for performance
-    // initSmoke();
+    initSmoke();
     initMobileMenu();
     initNewsletter();
     initSearch();

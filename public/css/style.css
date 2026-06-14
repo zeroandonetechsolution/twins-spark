@@ -791,6 +791,7 @@ textarea.input {
   justify-content: center;
 }
 
+/* Remove floating animation for performance */
 .floating-logo {
   animation: float 8s ease-in-out infinite;
   will-change: transform;
@@ -1463,12 +1464,14 @@ textarea.input {
   border: 0;
 }
 
-.hidden { display: none !important; }
-
-.powered-by-text {
-  color: var(--accent);
+.powered-by-highlight {
+  background: rgba(212, 175, 55, 0.2);
+  color: #d4af37;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
   font-weight: 600;
-  background: rgba(212, 175, 55, 0.1);
-  padding: 2px 8px;
-  border-radius: 4px;
+  display: inline-block;
+  margin-top: 1rem;
 }
+
+.hidden { display: none !important; }
