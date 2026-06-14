@@ -76,11 +76,10 @@
     const el = document.getElementById('preloader');
     if (!el) return;
 
-    // Super short preloader - 500ms for better UX
     setTimeout(() => {
       el.classList.add('is-hidden');
-      setTimeout(() => el.remove(), 300);
-    }, 500);
+      setTimeout(() => el.remove(), 800);
+    }, 4500);
   }
 
   // ── Smoke effect ──────────────────────────────────────
