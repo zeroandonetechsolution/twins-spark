@@ -315,7 +315,7 @@ textarea {
   width: 240px;
   height: auto;
   opacity: 0;
-  /* Upward wipe reveal + brightness fade + subtle zoom */
+  /* Subtle zoom + brightness fade */
   animation: logo-full-reveal 3.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
@@ -354,7 +354,6 @@ textarea {
   0% {
     opacity: 0;
     transform: scale(1.18);
-    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
     filter: blur(25px) brightness(0);
   }
   26% {
@@ -362,7 +361,6 @@ textarea {
     filter: blur(12px) brightness(0.25);
   }
   52% {
-    clip-path: polygon(0 100%, 100% 100%, 100% 0%, 0 0%);
     opacity: 0.7;
     filter: blur(3px) brightness(0.65);
     transform: scale(1.06);
@@ -374,7 +372,6 @@ textarea {
   }
   100% {
     opacity: 1;
-    clip-path: polygon(0 100%, 100% 100%, 100% 0%, 0 0%);
     filter: blur(0) brightness(1) drop-shadow(0 0 35px rgba(212, 175, 55, 0.9));
     transform: scale(1);
   }
