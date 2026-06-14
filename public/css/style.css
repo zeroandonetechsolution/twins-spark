@@ -310,7 +310,7 @@ textarea {
 .miracle-logo {
   position: relative;
   z-index: 5;
-  width: 120px;
+  width: 180px;
   height: auto;
   animation: logo-materialize 1.2s ease-out forwards;
   filter: blur(10px);
@@ -791,10 +791,9 @@ textarea.input {
   justify-content: center;
 }
 
-/* Remove floating animation for performance */
 .floating-logo {
-  /* animation: float 8s ease-in-out infinite; */
-  /* will-change: transform; */
+  animation: float 8s ease-in-out infinite;
+  will-change: transform;
 }
 
 .hero-content {
