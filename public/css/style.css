@@ -854,6 +854,8 @@ textarea.input {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 20 !important; /* Keep above hero glow */
 }
 
 /* Remove floating animation for performance */
@@ -964,6 +966,7 @@ textarea.input {
   border-radius: 50%;
   filter: blur(60px);
   pointer-events: none;
+  z-index: 1 !important; /* Keep behind logo */
 }
 
 .hero-glow-secondary {
@@ -976,6 +979,7 @@ textarea.input {
   border-radius: 50%;
   filter: blur(50px);
   pointer-events: none;
+  z-index: 1 !important; /* Keep behind logo */
 }
 
 /* Hero category cards (inside hero 1) */
