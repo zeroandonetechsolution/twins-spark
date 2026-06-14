@@ -240,70 +240,71 @@ textarea {
   padding: 2rem;
   overflow: visible;
 }
-/* Simplified golden mist */
+/* Golden mist drifting around logo */
 .miracle-mist {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
-  filter: blur(40px);
+  filter: blur(50px);
   opacity: 0;
   pointer-events: none;
 }
 .miracle-mist-1 {
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
-  top: 20%;
-  left: 10%;
-  animation: miracle-mist-rise 4s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, transparent 70%);
+  top: 15%;
+  left: 5%;
+  animation: miracle-mist-rise 4.5s ease-in-out infinite;
   animation-delay: 0s;
 }
 .miracle-mist-2 {
-  background: radial-gradient(circle, rgba(251, 191, 36, 0.2) 0%, transparent 70%);
-  bottom: 10%;
-  right: 5%;
-  animation: miracle-mist-rise 4s ease-in-out infinite;
-  animation-delay: 1s;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.35) 0%, transparent 70%);
+  bottom: 5%;
+  right: 0%;
+  animation: miracle-mist-rise 4.5s ease-in-out infinite;
+  animation-delay: 1.2s;
 }
 @keyframes miracle-mist-rise {
-  0% { 
-    opacity: 0; 
-    transform: translateY(30px) scale(0.6); 
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.5);
   }
-  25% { 
-    opacity: 0.4; 
+  30% {
+    opacity: 0.5;
   }
-  70% {
-    opacity: 0.2;
-  }
-  100% { 
-    opacity: 0; 
-    transform: translateY(-50px) scale(1.1); 
-  }
-}
-/* Simplified light core */
-.miracle-light-core {
-  position: absolute;
-  top: 70%;
-  left: 50%;
-  width: 150px;
-  height: 150px;
-  transform: translateX(-50%);
-  background: radial-gradient(ellipse at bottom, rgba(255, 223, 130, 0.7) 0%, rgba(212, 175, 55, 0.3) 40%, transparent 70%);
-  filter: blur(30px);
-  opacity: 0;
-  animation: light-bloom-up 1.2s ease-out forwards;
-}
-@keyframes light-bloom-up {
-  0% { 
-    opacity: 0; 
-    transform: translateX(-50%) translateY(20px) scale(0.5); 
-  }
-  50% { 
-    opacity: 0.6; 
+  75% {
+    opacity: 0.25;
   }
   100% {
-    opacity: 0.4;
-    transform: translateX(-50%) translateY(-20px) scale(1);
+    opacity: 0;
+    transform: translateY(-70px) scale(1.2);
+  }
+}
+/* Light bloom from below - divine energy */
+.miracle-light-core {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at bottom, rgba(255, 223, 130, 0.9) 0%, rgba(212, 175, 55, 0.5) 35%, transparent 75%);
+  filter: blur(40px);
+  opacity: 0;
+  animation: light-bloom-up 1.6s ease-out forwards;
+  animation-delay: 0.3s;
+}
+@keyframes light-bloom-up {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(30px) scale(0.4);
+  }
+  55% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 0.5;
+    transform: translateX(-50%) translateY(-30px) scale(1.1);
   }
 }
 /* ── Enhanced Preloader ─────────────────────────────────────────────── */
@@ -315,7 +316,7 @@ textarea {
   height: auto;
   opacity: 0;
   /* Upward wipe reveal + brightness fade + subtle zoom */
-  animation: logo-full-reveal 3.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: logo-full-reveal 3.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .miracle-logo-wrapper .preloader-logo {
@@ -338,50 +339,50 @@ textarea {
   background: linear-gradient(
     120deg,
     transparent 0%,
-    rgba(255, 223, 130, 0.8) 40%,
-    rgba(212, 175, 55, 0.6) 50%,
-    rgba(255, 223, 130, 0.8) 60%,
+    rgba(255, 223, 130, 0.9) 40%,
+    rgba(212, 175, 55, 0.7) 50%,
+    rgba(255, 223, 130, 0.9) 60%,
     transparent 100%
   );
   pointer-events: none;
   z-index: 10;
-  animation: light-sweep 1.2s ease-out forwards;
-  animation-delay: 1.4s;
+  animation: light-sweep 1.4s ease-out forwards;
+  animation-delay: 1.6s;
 }
 
 @keyframes logo-full-reveal {
   0% {
     opacity: 0;
-    transform: scale(1.15);
+    transform: scale(1.18);
     clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
-    filter: blur(20px) brightness(0);
+    filter: blur(25px) brightness(0);
   }
-  30% {
+  26% {
     opacity: 0.3;
-    filter: blur(10px) brightness(0.3);
+    filter: blur(12px) brightness(0.25);
   }
-  55% {
+  52% {
     clip-path: polygon(0 100%, 100% 100%, 100% 0%, 0 0%);
     opacity: 0.7;
-    filter: blur(2px) brightness(0.7);
-    transform: scale(1.05);
+    filter: blur(3px) brightness(0.65);
+    transform: scale(1.06);
   }
-  85% {
+  82% {
     opacity: 1;
-    filter: blur(0) brightness(1) drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+    filter: blur(0) brightness(1) drop-shadow(0 0 25px rgba(212, 175, 55, 0.5));
     transform: scale(1.02);
   }
   100% {
     opacity: 1;
     clip-path: polygon(0 100%, 100% 100%, 100% 0%, 0 0%);
-    filter: blur(0) brightness(1) drop-shadow(0 0 30px rgba(212, 175, 55, 0.8));
+    filter: blur(0) brightness(1) drop-shadow(0 0 35px rgba(212, 175, 55, 0.9));
     transform: scale(1);
   }
 }
 
 @keyframes light-sweep {
   0% { left: -100%; }
-  100% { left: 150%; }
+  100% { left: 180%; }
 }
 
 /* Soft vignette for cinematic feel */
@@ -393,7 +394,7 @@ textarea {
   z-index: 10;
 }
 
-/* Miracle particles */
+/* Miracle particles - 8 floating sparkles */
 .miracle-particles {
   position: absolute;
   inset: -30px;
@@ -414,21 +415,25 @@ textarea {
 .miracle-particles .m-particle:nth-child(2) { top: 10px; right: -5px; animation-delay: 0.6s; }
 .miracle-particles .m-particle:nth-child(3) { bottom: 10px; right: 20px; animation-delay: 0.9s; }
 .miracle-particles .m-particle:nth-child(4) { bottom: -15px; left: 10px; animation-delay: 1.2s; }
+.miracle-particles .m-particle:nth-child(5) { top: -5px; left: -10px; animation-delay: 0.15s; }
+.miracle-particles .m-particle:nth-child(6) { top: -25px; right: 15px; animation-delay: 0.45s; }
+.miracle-particles .m-particle:nth-child(7) { bottom: -5px; left: 30px; animation-delay: 1.05s; }
+.miracle-particles .m-particle:nth-child(8) { bottom: -25px; right: -10px; animation-delay: 1.35s; }
 @keyframes sparkle-rise {
   0% { 
     opacity: 0; 
-    transform: translateY(20px) scale(0.4); 
+    transform: translateY(25px) scale(0.35); 
   }
-  20% { 
+  25% { 
     opacity: 1; 
     transform: translateY(5px) scale(1); 
   }
-  80% {
+  75% {
     opacity: 0.6;
   }
   100% { 
     opacity: 0; 
-    transform: translateY(-30px) scale(0.5); 
+    transform: translateY(-40px) scale(0.45); 
   }
 }
 
