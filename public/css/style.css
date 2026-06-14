@@ -221,6 +221,9 @@ textarea {
 }
 .preloader-logo-wrap {
   position: relative;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 .preloader-glow {
   position: absolute;
@@ -239,6 +242,9 @@ textarea {
   position: relative;
   padding: 2rem;
   overflow: visible;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 /* Golden mist drifting around logo */
 .miracle-mist {
