@@ -335,7 +335,7 @@ textarea {
   box-shadow: none !important;
   /* Subtle zoom + brightness fade */
   animation: logo-full-reveal 3.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
-             logo-float 4s ease-in-out infinite 3.8s; /* Start floating after reveal */
+             logo-float 3s ease-in-out infinite 3.8s; /* Start floating after reveal */
 }
 
 .miracle-logo-wrapper .preloader-logo {
@@ -380,7 +380,7 @@ textarea {
 
 @keyframes logo-float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-12px); }
 }
 
 
@@ -858,7 +858,7 @@ textarea.input {
 
 /* Remove floating animation for performance */
 .floating-logo {
-  animation: float 8s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
   will-change: transform;
 }
 
