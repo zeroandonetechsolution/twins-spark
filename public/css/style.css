@@ -315,6 +315,9 @@ textarea {
   width: 240px;
   height: auto;
   opacity: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   /* Subtle zoom + brightness fade */
   animation: logo-full-reveal 3.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
@@ -323,9 +326,11 @@ textarea {
   width: 100%;
   height: auto;
   display: block;
-  background: transparent;
-  border: none;
-  outline: none;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 /* Light sweep overlay for golden shine */
