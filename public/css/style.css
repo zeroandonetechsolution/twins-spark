@@ -249,41 +249,41 @@ textarea {
 /* Golden mist drifting around logo */
 .miracle-mist {
   position: absolute;
-  width: 240px;
-  height: 240px;
+  width: 300px;
+  height: 300px;
   border-radius: 50%;
-  filter: blur(50px);
+  filter: blur(60px);
   opacity: 0;
   pointer-events: none;
 }
 .miracle-mist-1 {
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, transparent 70%);
-  top: 15%;
-  left: 5%;
-  animation: miracle-mist-rise 4.5s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.5) 0%, transparent 70%);
+  top: 20%;
+  left: 0%;
+  animation: miracle-mist-rise 5s ease-in-out infinite;
   animation-delay: 0s;
 }
 .miracle-mist-2 {
-  background: radial-gradient(circle, rgba(251, 191, 36, 0.35) 0%, transparent 70%);
-  bottom: 5%;
-  right: 0%;
-  animation: miracle-mist-rise 4.5s ease-in-out infinite;
-  animation-delay: 1.2s;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.45) 0%, transparent 70%);
+  bottom: 0%;
+  right: -5%;
+  animation: miracle-mist-rise 5s ease-in-out infinite;
+  animation-delay: 1.5s;
 }
 @keyframes miracle-mist-rise {
   0% {
     opacity: 0;
-    transform: translateY(40px) scale(0.5);
+    transform: translateY(60px) scale(0.4);
   }
-  30% {
-    opacity: 0.5;
+  35% {
+    opacity: 0.7;
   }
-  75% {
-    opacity: 0.25;
+  70% {
+    opacity: 0.4;
   }
   100% {
     opacity: 0;
-    transform: translateY(-70px) scale(1.2);
+    transform: translateY(-120px) scale(1.4);
   }
 }
 /* Light bloom from below - divine energy */
