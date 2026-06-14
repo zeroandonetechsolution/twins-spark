@@ -861,8 +861,8 @@ textarea.input {
 .hero-logo-glow {
   position: absolute;
   width: 550px;
-  height: 550px;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.6) 0%, rgba(212, 175, 55, 0.35) 40%, transparent 75%);
+  height: 480px;
+  background: radial-gradient(ellipse, rgba(212, 175, 55, 0.6) 0%, rgba(212, 175, 55, 0.35) 40%, transparent 75%);
   border-radius: 50%;
   filter: blur(70px);
   pointer-events: none;
@@ -871,8 +871,22 @@ textarea.input {
 }
 
 @keyframes hero-logo-glow-pulse {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.1); }
+  0%, 100% { 
+    opacity: 0.85; 
+    transform: scale(1) translateX(0) translateY(0); 
+  }
+  25% { 
+    opacity: 0.95; 
+    transform: scale(1.05) translateX(10px) translateY(-5px); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.1) translateX(0) translateY(0); 
+  }
+  75% { 
+    opacity: 0.95; 
+    transform: scale(1.05) translateX(-10px) translateY(5px); 
+  }
 }
 
 /* Remove floating animation for performance */
