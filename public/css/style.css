@@ -858,6 +858,23 @@ textarea.input {
   z-index: 20 !important; /* Keep above hero glow */
 }
 
+.hero-logo-glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, rgba(212, 175, 55, 0.15) 40%, transparent 75%);
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 1 !important; /* Stay behind logo */
+  animation: hero-logo-glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes hero-logo-glow-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
 /* Remove floating animation for performance */
 .floating-logo {
   animation: float 4s ease-in-out infinite;
