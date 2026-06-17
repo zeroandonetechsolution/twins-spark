@@ -162,6 +162,22 @@
               <span class="offer-price" id="offer-price"></span>
             </div>
             <p id="product-description" style="margin-bottom: 2rem; color: rgba(255,255,255,0.8); line-height: 1.7;"></p>
+            
+            <!-- Options Section -->
+            <div id="options-container" style="margin-bottom: 2rem; display: none;">
+              <!-- Color Selection -->
+              <div class="form-group" id="color-group" style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.75rem; font-weight: 600;">Color: <span id="selected-color-text" style="color: var(--accent);"></span></label>
+                <div id="color-options" style="display: flex; gap: 0.75rem; flex-wrap: wrap;"></div>
+              </div>
+              
+              <!-- Size Selection -->
+              <div class="form-group" id="size-group">
+                <label style="display: block; margin-bottom: 0.75rem; font-weight: 600;">Size: <span id="selected-size-text" style="color: var(--accent);"></span></label>
+                <div id="size-options" style="display: flex; gap: 0.75rem; flex-wrap: wrap;"></div>
+              </div>
+            </div>
+            
             <div style="display: flex; gap: 1rem;">
               <button class="btn btn-primary" id="add-to-cart">Add to Cart</button>
               <button class="btn btn-secondary" id="add-to-wishlist">Add to Wishlist</button>
@@ -272,6 +288,8 @@
     let reviewMedia = [];
     let currentMediaIndex = 0;
     let allMedia = [];
+    let selectedColor = null;
+    let selectedSize = null;
 
     // Load products from localStorage or use default
     function loadProducts() {
@@ -341,10 +359,73 @@
 
       // Update wishlist button state
       updateWishlistButton();
+      
+      // Render options if clothing
+      if (currentProduct.category === 'Clothing' && currentProduct.options) {
+        document.getElementById('options-container').style.display = 'block';
+        renderColorOptions();
+        renderSizeOptions();
+        // Preselect first options
+        if (currentProduct.options.colors.length > 0) {
+          selectColor(0);
+        }
+        if (currentProduct.options.sizes.length > 0) {
+          selectSize(0);
+        }
+      } else {
+        document.getElementById('options-container').style.display = 'none';
+      }
 
       document.getElementById('product-detail').classList.remove('hidden');
       document.getElementById('product-not-found').classList.add('hidden');
     }
+    
+    // Render color options
+    function renderColorOptions() {
+      const container = document.getElementById('color-options');
+      container.innerHTML = currentProduct.options.colors.map((color, idx) => `
+        <button type="button" 
+          class="btn btn-secondary color-btn" 
+          data-idx="${idx}" 
+          onclick="selectColor(${idx})"
+          style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;">
+          <div style="width: 24px; height: 24px; border-radius: 50%; background: ${color.hex}; border: 2px solid rgba(255,255,255,0.3);"></div>
+          <span>${color.name}</span>
+        </button>
+      `).join('');
+    }
+    
+    window.selectColor = function(idx) {
+      selectedColor = currentProduct.options.colors[idx];
+      document.getElementById('selected-color-text').textContent = selectedColor.name;
+      // Update button active states
+      document.querySelectorAll('.color-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+    };
+    
+    // Render size options
+    function renderSizeOptions() {
+      const container = document.getElementById('size-options');
+      container.innerHTML = currentProduct.options.sizes.map((size, idx) => `
+        <button type="button" 
+          class="btn btn-secondary size-btn" 
+          data-idx="${idx}" 
+          onclick="selectSize(${idx})"
+          style="padding: 0.5rem 1.25rem; font-weight: 600;">
+          ${size}
+        </button>
+      `).join('');
+    }
+    
+    window.selectSize = function(idx) {
+      selectedSize = currentProduct.options.sizes[idx];
+      document.getElementById('selected-size-text').textContent = selectedSize;
+      // Update button active states
+      document.querySelectorAll('.size-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+    };
 
     function renderMediaGallery() {
       const mainImage = document.getElementById('main-image');
@@ -536,7 +617,18 @@
     // Add to cart/wishlist
     document.getElementById('add-to-cart').addEventListener('click', () => {
       if (window.addToCart && currentProduct) {
-        window.addToCart(currentProduct.id);
+        // Validate options for clothing
+        if (currentProduct.category === 'Clothing') {
+          if (!selectedColor) {
+            alert('Please select a color');
+            return;
+          }
+          if (!selectedSize) {
+            alert('Please select a size');
+            return;
+          }
+        }
+        window.addToCart(currentProduct.id, { color: selectedColor, size: selectedSize });
       }
     });
 

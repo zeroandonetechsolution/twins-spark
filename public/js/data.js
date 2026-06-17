@@ -52,7 +52,15 @@ window.PRODUCTS = [
     videos: [],
     description: 'Cozy hoodie with subtle star dust print, perfect for casual cosmic style.',
     trending: false,
-    reviews: []
+    reviews: [],
+    options: {
+      colors: [
+        { name: 'Midnight Black', hex: '#1a1a2e' },
+        { name: 'Cosmic Blue', hex: '#16213e' },
+        { name: 'Nebula Pink', hex: '#e94560' }
+      ],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL']
+    }
   },
   { 
     id: 5, 

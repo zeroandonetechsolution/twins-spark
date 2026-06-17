@@ -1025,7 +1025,10 @@ textarea.input {
 }
 
 @media (min-width: 640px) {
-  .hero-categories { grid-template-columns: repeat(3, 1fr); }
+  .hero-categories { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .hero-categories { grid-template-columns: repeat(4, 1fr); }
 }
 
 .hero-category-card {
@@ -1061,6 +1064,7 @@ textarea.input {
 
 .hero-category-card .card-bg.gifts { background: rgba(212, 175, 55, 0.25); }
 .hero-category-card .card-bg.toys { background: rgba(251, 191, 36, 0.25); }
+.hero-category-card .card-bg.clothing { background: rgba(234, 88, 12, 0.25); }
 .hero-category-card .card-bg.accessories { background: rgba(253, 224, 71, 0.2); }
 
 .hero-category-card .card-content {
@@ -1123,6 +1127,41 @@ textarea.input {
   pointer-events: none;
 }
 
+/* Hero 3 — Classic (Signature) */
+.hero-classic {
+  position: relative;
+  padding: 4rem 0 5rem;
+}
+
+.hero-classic-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-classic .section-header {
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hero-classic .section-header h2 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+}
+
+.hero-classic-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 600px;
+  height: 300px;
+  transform: translateX(-50%);
+  background: rgba(234, 88, 12, 0.12);
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
 /* ── Product grid ──────────────────────────────────────── */
 
 .section-products {
@@ -1178,10 +1217,28 @@ textarea.input {
   overflow: hidden;
   border-radius: 1rem;
   padding: 1rem;
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: product-float 4s ease-in-out infinite;
 }
 
-.product-card:hover { transform: translateY(-5px); }
+/* Stagger delays for every card, repeating every 6 cards */
+.product-card:nth-child(6n+1) { animation-delay: 0s; }
+.product-card:nth-child(6n+2) { animation-delay: 0.5s; }
+.product-card:nth-child(6n+3) { animation-delay: 1s; }
+.product-card:nth-child(6n+4) { animation-delay: 1.5s; }
+.product-card:nth-child(6n+5) { animation-delay: 2s; }
+.product-card:nth-child(6n+6) { animation-delay: 2.5s; }
+
+.product-card:hover { 
+  animation-play-state: paused;
+  transform: translateY(-8px) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+@keyframes product-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
 
 .product-image-wrap {
   position: relative;

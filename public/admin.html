@@ -143,6 +143,47 @@
               <label>Description</label>
               <textarea id="product-description" class="input" rows="3" placeholder="Enter product description"></textarea>
             </div>
+            
+            <!-- Options (only for Clothing) -->
+            <div id="options-section" class="card" style="margin-bottom: 1.5rem; padding: 1.5rem;">
+              <div class="section-header" style="margin-bottom: 1rem;">
+                <h3 style="margin: 0;">Product Options</h3>
+              </div>
+              
+              <!-- Colors -->
+              <div class="form-group">
+                <label>Colors <span style="color: var(--accent);">*</span></label>
+                <div id="colors-list" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;"></div>
+                <div style="display: flex; gap: 0.5rem; position: relative;">
+                  <div style="flex: 1; position: relative;">
+                    <input type="text" id="color-input" class="input" placeholder="Search color e.g., Sky Blue, Crimson" style="flex: 1;" />
+                    <!-- Auto-suggest dropdown -->
+                    <div id="color-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: rgba(20,20,30,0.98); border: 1px solid var(--glass-border); border-radius: 0.5rem; margin-top: 0.25rem; max-height: 200px; overflow-y: auto; display: none; z-index: 100;"></div>
+                  </div>
+                  <input type="color" id="color-picker" value="#ffffff" style="width: 50px; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3);" />
+                  <button type="button" id="add-color" class="btn btn-secondary">Add</button>
+                </div>
+              </div>
+              
+              <!-- Sizes -->
+              <div class="form-group" style="margin-bottom: 0;">
+                <label>Sizes <span style="color: var(--accent);">*</span></label>
+                <div id="sizes-list" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;"></div>
+                <div style="margin-bottom: 0.75rem;">
+                  <span style="font-size: 0.875rem; color: rgba(255,255,255,0.7); margin-right: 0.5rem;">Quick add:</span>
+                  <button type="button" class="btn btn-secondary size-preset" data-size="S" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">S</button>
+                  <button type="button" class="btn btn-secondary size-preset" data-size="M" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">M</button>
+                  <button type="button" class="btn btn-secondary size-preset" data-size="L" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">L</button>
+                  <button type="button" class="btn btn-secondary size-preset" data-size="XL" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">XL</button>
+                  <button type="button" class="btn btn-secondary size-preset" data-size="XXL" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">XXL</button>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <input type="text" id="size-input" class="input" placeholder="Custom size e.g., XS, XXXL" style="flex: 1;" />
+                  <button type="button" id="add-size" class="btn btn-secondary">Add</button>
+                </div>
+              </div>
+            </div>
+            
             <div class="form-group">
               <label>Images (Max 6)</label>
               <div class="media-grid" id="images-grid"></div>
@@ -205,10 +246,155 @@
     const ADMIN_USERNAME = 'admin';
     const ADMIN_PASSWORD = 'admin123';
 
+    // Common colors (name -> hex)
+    const COMMON_COLORS = [
+      { name: 'AliceBlue', hex: '#F0F8FF' },
+      { name: 'AntiqueWhite', hex: '#FAEBD7' },
+      { name: 'Aqua', hex: '#00FFFF' },
+      { name: 'Aquamarine', hex: '#7FFFD4' },
+      { name: 'Azure', hex: '#F0FFFF' },
+      { name: 'Beige', hex: '#F5F5DC' },
+      { name: 'Bisque', hex: '#FFE4C4' },
+      { name: 'Black', hex: '#000000' },
+      { name: 'BlanchedAlmond', hex: '#FFEBCD' },
+      { name: 'Blue', hex: '#0000FF' },
+      { name: 'BlueViolet', hex: '#8A2BE2' },
+      { name: 'Brown', hex: '#A52A2A' },
+      { name: 'Burlywood', hex: '#DEB887' },
+      { name: 'CadetBlue', hex: '#5F9EA0' },
+      { name: 'Chartreuse', hex: '#7FFF00' },
+      { name: 'Chocolate', hex: '#D2691E' },
+      { name: 'Coral', hex: '#FF7F50' },
+      { name: 'CornflowerBlue', hex: '#6495ED' },
+      { name: 'Cornsilk', hex: '#FFF8DC' },
+      { name: 'Crimson', hex: '#DC143C' },
+      { name: 'Cyan', hex: '#00FFFF' },
+      { name: 'DarkBlue', hex: '#00008B' },
+      { name: 'DarkCyan', hex: '#008B8B' },
+      { name: 'DarkGoldenrod', hex: '#B8860B' },
+      { name: 'DarkGray', hex: '#A9A9A9' },
+      { name: 'DarkGreen', hex: '#006400' },
+      { name: 'DarkKhaki', hex: '#BDB76B' },
+      { name: 'DarkMagenta', hex: '#8B008B' },
+      { name: 'DarkOliveGreen', hex: '#556B2F' },
+      { name: 'DarkOrange', hex: '#FF8C00' },
+      { name: 'DarkOrchid', hex: '#9932CC' },
+      { name: 'DarkRed', hex: '#8B0000' },
+      { name: 'DarkSalmon', hex: '#E9967A' },
+      { name: 'DarkSeaGreen', hex: '#8FBC8F' },
+      { name: 'DarkSlateBlue', hex: '#483D8B' },
+      { name: 'DarkSlateGray', hex: '#2F4F4F' },
+      { name: 'DarkTurquoise', hex: '#00CED1' },
+      { name: 'DarkViolet', hex: '#9400D3' },
+      { name: 'DeepPink', hex: '#FF1493' },
+      { name: 'DeepSkyBlue', hex: '#00BFFF' },
+      { name: 'DimGray', hex: '#696969' },
+      { name: 'DodgerBlue', hex: '#1E90FF' },
+      { name: 'Firebrick', hex: '#B22222' },
+      { name: 'FloralWhite', hex: '#FFFAF0' },
+      { name: 'ForestGreen', hex: '#228B22' },
+      { name: 'Fuchsia', hex: '#FF00FF' },
+      { name: 'Gainsboro', hex: '#DCDCDC' },
+      { name: 'GhostWhite', hex: '#F8F8FF' },
+      { name: 'Gold', hex: '#FFD700' },
+      { name: 'Goldenrod', hex: '#DAA520' },
+      { name: 'Gray', hex: '#808080' },
+      { name: 'Green', hex: '#008000' },
+      { name: 'GreenYellow', hex: '#ADFF2F' },
+      { name: 'Honeydew', hex: '#F0FFF0' },
+      { name: 'HotPink', hex: '#FF69B4' },
+      { name: 'IndianRed', hex: '#CD5C5C' },
+      { name: 'Indigo', hex: '#4B0082' },
+      { name: 'Ivory', hex: '#FFFFF0' },
+      { name: 'Khaki', hex: '#F0E68C' },
+      { name: 'Lavender', hex: '#E6E6FA' },
+      { name: 'LavenderBlush', hex: '#FFF0F5' },
+      { name: 'LawnGreen', hex: '#7CFC00' },
+      { name: 'LemonChiffon', hex: '#FFFACD' },
+      { name: 'LightBlue', hex: '#ADD8E6' },
+      { name: 'LightCoral', hex: '#F08080' },
+      { name: 'LightCyan', hex: '#E0FFFF' },
+      { name: 'LightGoldenrodYellow', hex: '#FAFAD2' },
+      { name: 'LightGray', hex: '#D3D3D3' },
+      { name: 'LightGreen', hex: '#90EE90' },
+      { name: 'LightPink', hex: '#FFB6C1' },
+      { name: 'LightSalmon', hex: '#FFA07A' },
+      { name: 'LightSeaGreen', hex: '#20B2AA' },
+      { name: 'LightSkyBlue', hex: '#87CEFA' },
+      { name: 'LightSlateGray', hex: '#778899' },
+      { name: 'LightSteelBlue', hex: '#B0C4DE' },
+      { name: 'LightYellow', hex: '#FFFFE0' },
+      { name: 'Lime', hex: '#00FF00' },
+      { name: 'LimeGreen', hex: '#32CD32' },
+      { name: 'Linen', hex: '#FAF0E6' },
+      { name: 'Magenta', hex: '#FF00FF' },
+      { name: 'Maroon', hex: '#800000' },
+      { name: 'MediumAquamarine', hex: '#66CDAA' },
+      { name: 'MediumBlue', hex: '#0000CD' },
+      { name: 'MediumOrchid', hex: '#BA55D3' },
+      { name: 'MediumPurple', hex: '#9370DB' },
+      { name: 'MediumSeaGreen', hex: '#3CB371' },
+      { name: 'MediumSlateBlue', hex: '#7B68EE' },
+      { name: 'MediumSpringGreen', hex: '#00FA9A' },
+      { name: 'MediumTurquoise', hex: '#48D1CC' },
+      { name: 'MediumVioletRed', hex: '#C71585' },
+      { name: 'MidnightBlue', hex: '#191970' },
+      { name: 'MintCream', hex: '#F5FFFA' },
+      { name: 'MistyRose', hex: '#FFE4E1' },
+      { name: 'Moccasin', hex: '#FFE4B5' },
+      { name: 'NavajoWhite', hex: '#FFDEAD' },
+      { name: 'Navy', hex: '#000080' },
+      { name: 'OldLace', hex: '#FDF5E6' },
+      { name: 'Olive', hex: '#808000' },
+      { name: 'OliveDrab', hex: '#6B8E23' },
+      { name: 'Orange', hex: '#FFA500' },
+      { name: 'OrangeRed', hex: '#FF4500' },
+      { name: 'Orchid', hex: '#DA70D6' },
+      { name: 'PaleGoldenrod', hex: '#EEE8AA' },
+      { name: 'PaleGreen', hex: '#98FB98' },
+      { name: 'PaleTurquoise', hex: '#AFEEEE' },
+      { name: 'PaleVioletRed', hex: '#DB7093' },
+      { name: 'PapayaWhip', hex: '#FFEFD5' },
+      { name: 'PeachPuff', hex: '#FFDAB9' },
+      { name: 'Peru', hex: '#CD853F' },
+      { name: 'Pink', hex: '#FFC0CB' },
+      { name: 'Plum', hex: '#DDA0DD' },
+      { name: 'PowderBlue', hex: '#B0E0E6' },
+      { name: 'Purple', hex: '#800080' },
+      { name: 'Red', hex: '#FF0000' },
+      { name: 'RosyBrown', hex: '#BC8F8F' },
+      { name: 'RoyalBlue', hex: '#4169E1' },
+      { name: 'SaddleBrown', hex: '#8B4513' },
+      { name: 'Salmon', hex: '#FA8072' },
+      { name: 'SandyBrown', hex: '#F4A460' },
+      { name: 'SeaGreen', hex: '#2E8B57' },
+      { name: 'Seashell', hex: '#FFF5EE' },
+      { name: 'Sienna', hex: '#A0522D' },
+      { name: 'Silver', hex: '#C0C0C0' },
+      { name: 'SkyBlue', hex: '#87CEEB' },
+      { name: 'SlateBlue', hex: '#6A5ACD' },
+      { name: 'SlateGray', hex: '#708090' },
+      { name: 'Snow', hex: '#FFFAFA' },
+      { name: 'SpringGreen', hex: '#00FF7F' },
+      { name: 'SteelBlue', hex: '#4682B4' },
+      { name: 'Tan', hex: '#D2B48C' },
+      { name: 'Teal', hex: '#008080' },
+      { name: 'Thistle', hex: '#D8BFD8' },
+      { name: 'Tomato', hex: '#FF6347' },
+      { name: 'Turquoise', hex: '#40E0D0' },
+      { name: 'Violet', hex: '#EE82EE' },
+      { name: 'Wheat', hex: '#F5DEB3' },
+      { name: 'White', hex: '#FFFFFF' },
+      { name: 'WhiteSmoke', hex: '#F5F5F5' },
+      { name: 'Yellow', hex: '#FFFF00' },
+      { name: 'YellowGreen', hex: '#9ACD32' }
+    ];
     // State
     let products = [];
     let tempImages = [];
     let tempVideos = [];
+    let tempColors = [];
+    let tempSizes = [];
     let editingId = null;
 
     // Limits
@@ -358,6 +544,151 @@
       }
     });
 
+    // Category change to show/hide options
+    document.getElementById('product-category').addEventListener('change', () => {
+      const category = document.getElementById('product-category').value;
+      const optionsSection = document.getElementById('options-section');
+      optionsSection.style.display = category === 'Clothing' ? 'block' : 'none';
+    });
+
+    // Add color
+    document.getElementById('add-color').addEventListener('click', () => {
+      const name = document.getElementById('color-input').value.trim();
+      const hex = document.getElementById('color-picker').value;
+      if (name) {
+        addColor(name, hex);
+      }
+    });
+
+    // Color search/auto-suggest
+    const colorInput = document.getElementById('color-input');
+    const colorSuggestions = document.getElementById('color-suggestions');
+
+    colorInput.addEventListener('input', () => {
+      const query = colorInput.value.trim().toLowerCase();
+      if (query.length === 0) {
+        colorSuggestions.style.display = 'none';
+        return;
+      }
+
+      // Filter common colors
+      const matches = COMMON_COLORS.filter(color => 
+        color.name.toLowerCase().includes(query)
+      );
+
+      if (matches.length === 0) {
+        colorSuggestions.style.display = 'none';
+        return;
+      }
+
+      // Render suggestions
+      colorSuggestions.innerHTML = matches.map(color => `
+        <div class="color-suggestion" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; cursor: pointer; transition: background 0.2s;">
+          <div style="width: 24px; height: 24px; border-radius: 50%; background: ${color.hex}; border: 1px solid rgba(255,255,255,0.3); flex-shrink: 0;"></div>
+          <span style="flex: 1;">${color.name}</span>
+          <span style="font-size: 0.75rem; color: rgba(255,255,255,0.5);">${color.hex}</span>
+        </div>
+      `).join('');
+
+      // Add click events to suggestions
+      colorSuggestions.querySelectorAll('.color-suggestion').forEach((el, index) => {
+        el.addEventListener('click', () => selectColorSuggestion(matches[index]));
+        el.addEventListener('mouseenter', () => {
+          el.style.background = 'rgba(255,255,255,0.1)';
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.background = 'transparent';
+        });
+      });
+
+      colorSuggestions.style.display = 'block';
+    });
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!colorInput.contains(e.target) && !colorSuggestions.contains(e.target)) {
+        colorSuggestions.style.display = 'none';
+      }
+    });
+
+    // Handle Enter key to select first suggestion
+    colorInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        // Check if there are suggestions visible
+        if (colorSuggestions.style.display === 'block') {
+          const firstSuggestion = colorSuggestions.querySelector('.color-suggestion');
+          if (firstSuggestion) {
+            firstSuggestion.click();
+          } else {
+            // No suggestions, add custom color
+            const name = colorInput.value.trim();
+            const hex = document.getElementById('color-picker').value;
+            if (name) {
+              addColor(name, hex);
+            }
+          }
+        } else {
+          // No suggestions open, add custom color
+          const name = colorInput.value.trim();
+          const hex = document.getElementById('color-picker').value;
+          if (name) {
+            addColor(name, hex);
+          }
+        }
+      }
+    });
+
+    function selectColorSuggestion(color) {
+      document.getElementById('color-input').value = color.name;
+      document.getElementById('color-picker').value = color.hex;
+      colorSuggestions.style.display = 'none';
+      // Optionally auto-add it, but let user click Add button to confirm
+      // addColor(color.name, color.hex);
+    }
+
+    function addColor(name, hex) {
+      // Check if color already exists by name or hex
+      const exists = tempColors.some(c => 
+        c.name.toLowerCase() === name.toLowerCase() || c.hex.toLowerCase() === hex.toLowerCase()
+      );
+      if (exists) {
+        alert(`Color "${name}" (${hex}) is already added`);
+        return;
+      }
+      tempColors.push({ name, hex });
+      renderColors();
+      document.getElementById('color-input').value = '';
+      colorSuggestions.style.display = 'none';
+    }
+
+    // Add size
+    document.getElementById('add-size').addEventListener('click', () => {
+      const size = document.getElementById('size-input').value.trim();
+      if (size) {
+        addSize(size);
+      }
+    });
+
+    // Handle size presets
+    document.querySelectorAll('.size-preset').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const size = btn.dataset.size;
+        addSize(size);
+      });
+    });
+
+    function addSize(size) {
+      // Don't add if already exists
+      if (tempSizes.includes(size)) {
+        alert(`Size "${size}" is already added`);
+        return;
+      }
+      tempSizes.push(size);
+      renderSizes();
+      document.getElementById('size-input').value = '';
+    }
+
     // Render media grid
     function renderMediaGrid(type) {
       const grid = document.getElementById(`${type}-grid`);
@@ -382,25 +713,82 @@
         renderMediaGrid('videos');
       }
       updateHelpText();
+    };
+
+    // Render colors
+    function renderColors() {
+      const list = document.getElementById('colors-list');
+      list.innerHTML = tempColors.map((color, idx) => `
+        <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; background: rgba(0,0,0,0.3); border-radius: 0.5rem; border: 1px solid var(--glass-border);">
+          <div style="width: 24px; height: 24px; border-radius: 50%; background: ${color.hex}; border: 1px solid rgba(255,255,255,0.3);"></div>
+          <span>${color.name}</span>
+          <button type="button" onclick="removeColor(${idx})" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; padding: 0;">&times;</button>
+        </div>
+      `).join('');
     }
+
+    window.removeColor = function(idx) {
+      tempColors.splice(idx, 1);
+      renderColors();
+    };
+
+    // Render sizes
+    function renderSizes() {
+      const list = document.getElementById('sizes-list');
+      list.innerHTML = tempSizes.map((size, idx) => `
+        <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; background: rgba(0,0,0,0.3); border-radius: 0.5rem; border: 1px solid var(--glass-border);">
+          <span>${size}</span>
+          <button type="button" onclick="removeSize(${idx})" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; padding: 0;">&times;</button>
+        </div>
+      `).join('');
+    }
+
+    window.removeSize = function(idx) {
+      tempSizes.splice(idx, 1);
+      renderSizes();
+    };
 
     // Product form
     const productForm = document.getElementById('product-form');
     productForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
+      const category = document.getElementById('product-category').value;
+      
+      // Validate options for Clothing
+      if (category === 'Clothing') {
+        if (tempColors.length === 0) {
+          alert('Please add at least one color');
+          return;
+        }
+        if (tempSizes.length === 0) {
+          alert('Please add at least one size');
+          return;
+        }
+      }
+      
       const product = {
         id: editingId || Date.now(),
         name: document.getElementById('product-name').value,
         realPrice: document.getElementById('product-real-price').value,
         offerPrice: document.getElementById('product-offer-price').value,
-        category: document.getElementById('product-category').value,
+        category: category,
         description: document.getElementById('product-description').value,
         images: [...tempImages],
         videos: [...tempVideos],
         trending: document.getElementById('product-trending').checked,
         reviews: editingId ? products.find(p => p.id === editingId)?.reviews || [] : []
       };
+      
+      // Add options only if category is Clothing
+      if (category === 'Clothing') {
+        product.options = {
+          colors: [...tempColors],
+          sizes: [...tempSizes]
+        };
+      } else {
+        product.options = undefined;
+      }
 
       if (editingId) {
         const idx = products.findIndex(p => p.id === editingId);
@@ -418,13 +806,19 @@
       productForm.reset();
       tempImages = [];
       tempVideos = [];
+      tempColors = [];
+      tempSizes = [];
       editingId = null;
       document.getElementById('form-title').textContent = 'Add New Product';
       document.getElementById('submit-btn').textContent = 'Add Product';
       document.getElementById('cancel-edit').classList.add('hidden');
       renderMediaGrid('images');
       renderMediaGrid('videos');
+      renderColors();
+      renderSizes();
       updateHelpText();
+      // Hide options section by default
+      document.getElementById('options-section').style.display = 'none';
     }
 
     document.getElementById('cancel-edit').addEventListener('click', resetForm);
@@ -468,9 +862,17 @@
 
       tempImages = product.images || [];
       tempVideos = product.videos || [];
+      tempColors = product.options?.colors || [];
+      tempSizes = product.options?.sizes || [];
+      
       renderMediaGrid('images');
       renderMediaGrid('videos');
+      renderColors();
+      renderSizes();
       updateHelpText();
+      
+      // Show options section if clothing
+      document.getElementById('options-section').style.display = product.category === 'Clothing' ? 'block' : 'none';
 
       document.getElementById('form-title').textContent = 'Edit Product';
       document.getElementById('submit-btn').textContent = 'Save Changes';
