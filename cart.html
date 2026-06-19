@@ -1,12 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shipping - Twins Spark</title>
-  <meta name="description" content="Shipping information for Twins Spark" />
-  <link rel="icon" href="assets/logo.png" type="image/png" />
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - Twins Spark</title>
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    :root {
+      --glass-bg: rgba(13, 13, 13, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+    .cart-page { padding-top: 4rem; padding-bottom: 4rem; }
+    .cart-section { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+    @media (min-width: 1024px) { .cart-section { grid-template-columns: 2fr 1fr; } }
+    .cart-items { display: grid; gap: 1rem; }
+    .cart-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 1rem; align-items: center; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1rem; }
+    @media (min-width: 768px) { .cart-item { grid-template-columns: 100px 1fr auto auto auto; } }
+    .cart-item-image { width: 80px; height: 80px; aspect-ratio: 1; border-radius: 0.5rem; background: rgba(0,0,0,0.3); overflow: hidden; }
+    @media (min-width: 768px) { .cart-item-image { width: 100px; height: 100px; } }
+    .cart-item-image img { width: 100%; height: 100%; object-fit: cover; }
+    .cart-item-info h3 { margin: 0 0 0.25rem; font-size: 1.125rem; }
+    .cart-item-info .item-price { color: var(--accent); font-weight: 700; }
+    .cart-item-info .item-options { font-size: 0.875rem; color: rgba(255,255,255,0.6); margin-top: 0.25rem; }
+    .qty-controls { display: flex; align-items: center; gap: 0.5rem; }
+    .qty-btn { width: 32px; height: 32px; border-radius: 0.5rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); color: #fff; cursor: pointer; }
+    .qty-input { width: 50px; text-align: center; padding: 0.5rem; border-radius: 0.5rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: #fff; }
+    .cart-summary { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1.5rem; height: fit-content; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.75rem; }
+    .summary-row.total { border-top: 1px solid var(--glass-border); padding-top: 0.75rem; margin-top: 0.75rem; font-weight: 700; font-size: 1.125rem; }
+    .btn { padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; }
+    .btn-primary { background: var(--accent); color: #000; width: 100%; }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-danger { background: #ef4444; color: #fff; padding: 0.5rem 0.75rem; font-size: 0.875rem; }
+    .btn-danger:hover { background: #dc2626; }
+    .empty-cart { text-align: center; padding: 4rem 1rem; }
+  </style>
 </head>
 <body>
   <!-- Preloader -->
@@ -18,7 +47,7 @@
         <div class="miracle-flow-wrap">
           <div class="miracle-mist miracle-mist-1" aria-hidden="true"></div><div class="miracle-mist miracle-mist-2" aria-hidden="true"></div><div class="miracle-mist miracle-mist-3" aria-hidden="true"></div>
           <div class="miracle-light-core" aria-hidden="true"></div>
-          <div class="miracle-logo-wrapper"><img src="assets/logo.png" alt="Twins Spark" class="preloader-logo" /></div>
+          <div class="miracle-logo-wrapper"><img src="assets/logo.png" alt="Twins Spark" class="preloader-logo"></div>
           <div class="miracle-particles" aria-hidden="true">
             <span class="m-particle"></span>
             <span class="m-particle"></span>
@@ -35,17 +64,10 @@
   </div>
 
   <div class="stars" aria-hidden="true"></div>
-  <div id="smoke-container" class="smoke-container" aria-hidden="true">
-    <div class="smoke-blob smoke-blob-1"></div>
-    <div class="smoke-blob smoke-blob-2"></div>
-    <div id="smoke-particles"></div>
-    <div class="smoke-noise-overlay"></div>
-  </div>
-
   <nav class="navbar glass" aria-label="Main navigation">
     <div class="container navbar-inner">
       <a href="index.html" class="logo" aria-label="Twins Spark Home">
-        <img src="assets/logo.png" alt="Twins Spark" class="logo-img" />
+        <img src="assets/logo.png" alt="Twins Spark" class="logo-img">
         <span class="logo-text">Twins Spark</span>
       </a>
       <div class="nav-links">
@@ -62,10 +84,10 @@
           <span data-icon="heart"></span>
           <span class="cart-badge" data-wishlist-count>0</span>
         </a>
-        <button type="button" class="icon-btn cart-btn" aria-label="Shopping cart">
+        <a href="cart.html" class="icon-btn cart-btn" aria-label="Shopping cart">
           <span data-icon="cart"></span>
           <span class="cart-badge" data-cart-count>0</span>
-        </button>
+        </a>
         <button type="button" class="icon-btn menu-btn" id="menu-toggle" aria-label="Open menu">
           <span data-icon="menu"></span>
         </button>
@@ -88,41 +110,35 @@
     </nav>
   </aside>
 
-  <main>
-    <section class="category-hero">
-      <div class="container">
-        <h1 class="category-title">Shipping Information</h1>
-        <p class="category-subtitle">Everything you need to know about shipping</p>
-      </div>
-    </section>
+  <main class="cart-page">
+    <div class="container">
+      <section class="category-hero" style="padding-top: 2rem;">
+        <h1 class="category-title">Your Cart</h1>
+        <p class="category-subtitle">Review your items and proceed to checkout</p>
+      </section>
 
-    <section class="products-section">
-      <div class="container">
-        <div class="card" style="padding: 2rem;">
-          <h2 style="margin-bottom: 1.5rem;">Shipping Options</h2>
-          <div style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 0.5rem;">Standard Shipping</h3>
-            <p style="color: rgba(255,255,255,0.8);">Delivery in 5-7 business days. Free on orders over ₹999.</p>
-          </div>
-          <div style="margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 0.5rem;">Express Shipping</h3>
-            <p style="color: rgba(255,255,255,0.8);">Delivery in 2-3 business days. ₹199 flat rate.</p>
-          </div>
-          <div>
-            <h3 style="margin-bottom: 0.5rem;">International Shipping</h3>
-            <p style="color: rgba(255,255,255,0.8);">Available to select countries. Rates calculated at checkout.</p>
+      <section class="cart-section">
+        <div>
+          <div id="cart-items" class="cart-items"></div>
+          <div id="empty-cart" class="empty-cart hidden">
+            <h2 style="margin-bottom: 1rem;">Your cart is empty</h2>
+            <p style="color: rgba(255,255,255,0.6); margin-bottom: 2rem;">Looks like you haven't added anything to your cart yet.</p>
+            <a href="index.html" class="btn btn-primary" style="display: inline-block; width: auto;">Continue Shopping</a>
           </div>
         </div>
-      </div>
-    </section>
+        <div>
+          <div id="cart-summary" class="cart-summary"></div>
+        </div>
+      </section>
+    </div>
   </main>
 
-  <footer class="footer glass">
+  <footer class="footer glass" style="margin-top: auto;">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="index.html" class="logo" aria-label="Twins Spark Home">
-            <img src="assets/logo.png" alt="Twins Spark" class="logo-img" />
+            <img src="assets/logo.png" alt="Twins Spark" class="logo-img">
             <span class="logo-text">Twins Spark</span>
           </a>
           <p>
@@ -130,7 +146,6 @@
             accessories, and apparel.
           </p>
         </div>
-
         <div>
           <h4>SHOP</h4>
           <ul>
@@ -140,7 +155,6 @@
             <li><a href="#">New Arrivals</a></li>
           </ul>
         </div>
-
         <div>
           <h4>LEGAL</h4>
           <ul>
@@ -151,7 +165,6 @@
           </ul>
         </div>
       </div>
-
       <div class="footer-bottom">
         <div class="footer-copy">
           <p>&copy; <span data-year></span> Twins Spark. All Rights Reserved.</p>
@@ -160,11 +173,11 @@
           <h5>Powered and Protected By</h5>
           <div class="powered-logos">
             <div class="powered-logo-item">
-              <img src="assets/zero and one.png" alt="Zero & One Tech Solution Pvt Ltd" class="powered-logo" />
+              <img src="assets/zero and one.png" alt="Zero & One Tech Solution Pvt Ltd" class="powered-logo">
               <span>Zero & One Tech Solution Pvt Ltd</span>
             </div>
             <div class="powered-logo-item">
-              <img src="assets/SJ.png" alt="Security Junction Pvt Ltd" class="powered-logo" />
+              <img src="assets/SJ.png" alt="Security Junction Pvt Ltd" class="powered-logo">
               <span>Security Junction Pvt Ltd</span>
             </div>
           </div>
@@ -177,9 +190,15 @@
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>
-    document.querySelectorAll('[data-icon]').forEach(function (el) {
+    document.querySelectorAll('[data-icon]').forEach(function(el) {
       var name = el.getAttribute('data-icon');
       if (window.ICONS && window.ICONS[name]) el.innerHTML = window.ICONS[name];
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.renderCart) {
+        window.renderCart();
+      }
     });
   </script>
 </body>

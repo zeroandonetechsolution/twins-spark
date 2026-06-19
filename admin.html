@@ -41,7 +41,7 @@
     .help-text { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem; }
   </style>
 </head>
-<body>
+<body class="page-admin">
   <!-- Original Preloader -->
   <div id="preloader" class="preloader-container">
     <div class="preloader-vignette" aria-hidden="true"></div>
@@ -121,15 +121,25 @@
               <input type="text" id="product-name" class="input" placeholder="Enter product name" required />
             </div>
             <div class="price-inputs">
-              <div class="form-group" style="margin-bottom: 0;">
-                <label>Real Price (₹)</label>
-                <input type="text" id="product-real-price" class="input" placeholder="e.g., ₹3,999" required />
-              </div>
-              <div class="form-group" style="margin-bottom: 0;">
-                <label>Offer Price (₹)</label>
-                <input type="text" id="product-offer-price" class="input" placeholder="e.g., ₹2,999" required />
-              </div>
-            </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>Real Price (₹)</label>
+          <input type="text" id="product-real-price" class="input" placeholder="e.g., ₹3,999" required />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>Offer Price (₹)</label>
+          <input type="text" id="product-offer-price" class="input" placeholder="e.g., ₹2,999" required />
+        </div>
+      </div>
+      <div class="price-inputs">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>GST (%)</label>
+          <input type="text" id="product-gst" class="input" placeholder="e.g., 18" />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>Delivery Cost (₹)</label>
+          <input type="text" id="product-delivery-cost" class="input" placeholder="e.g., ₹50" />
+        </div>
+      </div>
             <div class="form-group">
               <label>Category</label>
               <select id="product-category" class="input" required>
@@ -233,6 +243,49 @@
             <img src="assets/logo.png" alt="Twins Spark" class="logo-img" />
             <span class="logo-text">Twins Spark</span>
           </a>
+          <p>
+            Elevating the ordinary into the extraordinary with cosmic-inspired gifts,
+            accessories, and apparel.
+          </p>
+        </div>
+
+        <div>
+          <h4>SHOP</h4>
+          <ul>
+            <li><a href="clothing.html">Clothing</a></li>
+            <li><a href="gifts.html">Gifts</a></li>
+            <li><a href="#">Custom Gifts</a></li>
+            <li><a href="#">New Arrivals</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>LEGAL</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="data-safety.html">Data Safety</a></li>
+            <li><a href="admin.html">Admin Panel</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          <p>&copy; <span data-year></span> Twins Spark. All Rights Reserved.</p>
+        </div>
+        <div class="powered-section">
+          <h5>Powered and Protected By</h5>
+          <div class="powered-logos">
+            <div class="powered-logo-item">
+              <img src="assets/zero and one.png" alt="Zero & One Tech Solution Pvt Ltd" class="powered-logo" />
+              <span>Zero & One Tech Solution Pvt Ltd</span>
+            </div>
+            <div class="powered-logo-item">
+              <img src="assets/SJ.png" alt="Security Junction Pvt Ltd" class="powered-logo" />
+              <span>Security Junction Pvt Ltd</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -772,6 +825,8 @@
         name: document.getElementById('product-name').value,
         realPrice: document.getElementById('product-real-price').value,
         offerPrice: document.getElementById('product-offer-price').value,
+        gst: document.getElementById('product-gst').value,
+        deliveryCost: document.getElementById('product-delivery-cost').value,
         category: category,
         description: document.getElementById('product-description').value,
         images: [...tempImages],
@@ -856,6 +911,8 @@
       document.getElementById('product-name').value = product.name;
       document.getElementById('product-real-price').value = product.realPrice;
       document.getElementById('product-offer-price').value = product.offerPrice;
+      document.getElementById('product-gst').value = product.gst || '';
+      document.getElementById('product-delivery-cost').value = product.deliveryCost || '';
       document.getElementById('product-category').value = product.category;
       document.getElementById('product-description').value = product.description || '';
       document.getElementById('product-trending').checked = !!product.trending;

@@ -729,16 +729,15 @@ textarea.input {
   transition: color 0.2s;
   padding: 0;
   display: inline-flex;
+  position: relative;
 }
 
 .icon-btn:hover { color: #fff; }
 
-.cart-btn { position: relative; }
-
 .cart-badge {
   position: absolute;
-  right: -0.25rem;
-  top: -0.25rem;
+  right: -0.45rem;
+  top: -0.45rem;
   display: flex;
   height: 1rem;
   width: 1rem;
@@ -1500,7 +1499,14 @@ textarea.input {
 }
 
 @media (min-width: 768px) {
-  .footer-grid { grid-template-columns: repeat(4, 1fr); }
+  .footer-grid { grid-template-columns: 2fr 1fr 1fr; }
+}
+
+.footer-brand-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #d4af37;
+  margin: 0;
 }
 
 .footer-brand p {
@@ -1512,13 +1518,24 @@ textarea.input {
 
 .footer-brand .logo { margin-bottom: 1rem; }
 
+.social-link-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .footer h4 {
   margin: 0 0 1rem;
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #fff;
+  color: #d4af37;
 }
 
 .footer ul {
@@ -1549,13 +1566,53 @@ textarea.input {
 
 .social-links a:hover { color: #fff; }
 
-.footer-copy {
+.footer-bottom {
   margin-top: 3rem;
   padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   text-align: center;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.3);
+}
+
+.footer-copy {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 1.5rem;
+}
+
+.powered-section {
+  margin-top: 1rem;
+}
+
+.powered-section h5 {
+  margin: 0 0 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.powered-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.powered-logo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.powered-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.powered-logo-item span {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* ── Stub / inner pages ──────────────────────────────── */

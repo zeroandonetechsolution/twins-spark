@@ -4,9 +4,21 @@
   const PARTICLE_COUNT = 3;
   const CART_KEY = 'twins_spark_cart';
   const WISHLIST_KEY = 'twins_spark_wishlist';
+  const ORDERS_KEY = 'twins_spark_orders';
 
   let cart = [];
   let wishlist = new Set();
+
+  // Helper function to parse price string (e.g., "₹2,999" → 2999)
+  function parsePrice(priceStr) {
+    if (!priceStr) return 0;
+    return parseFloat(priceStr.replace(/[^0-9.-]/g, ''));
+  }
+
+  // Helper function to format price with ₹
+  function formatPrice(amount) {
+    return `₹${amount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  }
 
   // ── Storage ─────────────────────────────────────────────
 
@@ -76,6 +88,15 @@
     const el = document.getElementById('preloader');
     if (!el) return;
 
+    const isHomePage = document.body.classList.contains('page-home');
+    const isAdminPage = document.body.classList.contains('page-admin');
+
+    if (!isHomePage && !isAdminPage) {
+      // Not home or admin, hide preloader immediately
+      el.style.display = 'none';
+      return;
+    }
+
     setTimeout(() => {
       el.classList.add('is-hidden');
       setTimeout(() => el.remove(), 800);
@@ -122,7 +143,7 @@
           const realPrice = p.realPrice || null;
           const offerPrice = p.offerPrice || p.price;
           // Use first image if available, otherwise p.image
-          const mainImage = (p.images && p.images[0]) || p.image || '';
+          const mainImage = (p.images && p.images[0]?.src || p.images?.[0]) || p.image || '';
 
           return `
       <article class="product-card glass" data-product-id="${p.id}">
@@ -130,7 +151,7 @@
           <div class="product-image-wrap">
             ${
               mainImage
-                ? `<img src="${mainImage}" alt="${p.name}" loading="lazy" />`
+                ? `<img src="${mainImage}" alt="${p.name}" loading="lazy">`
                 : `<div class="product-image-placeholder">[Product Image: ${p.name}]</div>`
             }
             <button type="button" class="wishlist-btn${wishlist.has(p.id) ? ' is-active' : ''}" data-wishlist="${p.id}" aria-label="Add to wishlist" onclick="event.stopPropagation();">
@@ -188,9 +209,13 @@
       cart.push({ 
         id: product.id, 
         name: product.name, 
-        price: product.offerPrice || product.price, 
+        price: product.offerPrice || product.price,
+        realPrice: product.realPrice || null,
+        gst: product.gst || null,
+        deliveryCost: product.deliveryCost || null,
         qty: 1,
-        options: options 
+        options: options,
+        image: (product.images && product.images[0]?.src || product.images?.[0]) || product.image || ''
       });
     }
 
@@ -198,6 +223,221 @@
     showToast(`${product.name} added to cart`);
   }
   window.addToCart = addToCart;
+
+  function updateCartItemQty(index, qty) {
+    if (qty < 1) {
+      removeFromCart(index);
+      return;
+    }
+    cart[index].qty = qty;
+    saveCart();
+    renderCart();
+  }
+  window.updateCartItemQty = updateCartItemQty;
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    saveCart();
+    renderCart();
+  }
+  window.removeFromCart = removeFromCart;
+
+  function calculateCartTotals() {
+    let subtotal = 0;
+    let totalGst = 0;
+    let totalDelivery = 0;
+
+    cart.forEach(item => {
+      const itemPrice = parsePrice(item.price);
+      subtotal += itemPrice * item.qty;
+
+      if (item.gst) {
+        const gstPercent = parsePrice(item.gst);
+        totalGst += (itemPrice * gstPercent / 100) * item.qty;
+      }
+
+      if (item.deliveryCost) {
+        const deliveryPrice = parsePrice(item.deliveryCost);
+        // Add delivery cost once per unique item type
+        const existingDelivery = cart.findIndex(i => i.id === item.id && JSON.stringify(i.options) === JSON.stringify(item.options));
+        if (existingDelivery === cart.indexOf(item)) {
+          totalDelivery += deliveryPrice;
+        }
+      }
+    });
+
+    const total = subtotal + totalGst + totalDelivery;
+
+    return {
+      subtotal,
+      totalGst,
+      totalDelivery,
+      total
+    };
+  }
+
+  function renderCart() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    const emptyCartContainer = document.getElementById('empty-cart');
+    const cartSummaryContainer = document.getElementById('cart-summary');
+
+    if (!cartItemsContainer) return;
+
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = '';
+      emptyCartContainer.classList.remove('hidden');
+      if (cartSummaryContainer) cartSummaryContainer.innerHTML = '';
+      return;
+    }
+
+    emptyCartContainer.classList.add('hidden');
+
+    cartItemsContainer.innerHTML = cart.map((item, index) => {
+      const optionsText = item.options 
+        ? Object.entries(item.options)
+            .map(([key, value]) => {
+              if (typeof value === 'object' && value.name) return `${key}: ${value.name}`;
+              return `${key}: ${value}`;
+            })
+            .join(' • ')
+        : '';
+
+      return `
+        <div class="cart-item">
+          <div class="cart-item-image">
+            <img src="${item.image || ''}" alt="${item.name}">
+          </div>
+          <div class="cart-item-info">
+            <h3>${item.name}</h3>
+            ${optionsText ? `<p class="item-options">${optionsText}</p>` : ''}
+            <p class="item-price">${item.price}</p>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="updateCartItemQty(${index}, ${item.qty - 1})">-</button>
+            <input type="number" class="qty-input" value="${item.qty}" min="1" onchange="updateCartItemQty(${index}, parseInt(this.value))">
+            <button class="qty-btn" onclick="updateCartItemQty(${index}, ${item.qty + 1})">+</button>
+          </div>
+          <button class="btn btn-danger" onclick="removeFromCart(${index})">Remove</button>
+        </div>
+      `;
+    }).join('');
+
+    if (cartSummaryContainer) {
+      const totals = calculateCartTotals();
+      cartSummaryContainer.innerHTML = `
+        <h2 style="margin-top: 0; margin-bottom: 1.5rem;">Order Summary</h2>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>${formatPrice(totals.subtotal)}</span>
+        </div>
+        <div class="summary-row">
+          <span>GST</span>
+          <span>${formatPrice(totals.totalGst)}</span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery</span>
+          <span>${formatPrice(totals.totalDelivery)}</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span style="color: var(--accent);">${formatPrice(totals.total)}</span>
+        </div>
+        <a href="checkout.html" class="btn btn-primary" style="display: block; text-align: center; text-decoration: none; margin-top: 1.5rem;">Proceed to Checkout</a>
+      `;
+    }
+  }
+  window.renderCart = renderCart;
+
+  function renderCheckoutSummary() {
+    const checkoutSummaryContainer = document.getElementById('checkout-summary');
+
+    if (!checkoutSummaryContainer) return;
+
+    if (cart.length === 0) {
+      checkoutSummaryContainer.innerHTML = `
+        <p style="text-align: center; color: rgba(255,255,255,0.6);">Your cart is empty</p>
+        <a href="cart.html" class="btn btn-primary" style="display: block; text-align: center; text-decoration: none; margin-top: 1rem;">Go to Cart</a>
+      `;
+      return;
+    }
+
+    const totals = calculateCartTotals();
+
+    checkoutSummaryContainer.innerHTML = `
+      <h2 style="margin-top: 0; margin-bottom: 1.5rem;">Order Summary</h2>
+      <div class="checkout-items">
+        ${cart.map(item => `
+          <div class="checkout-item">
+            <div class="checkout-item-image">
+              <img src="${item.image || ''}" alt="${item.name}">
+            </div>
+            <div class="checkout-item-info">
+              <h4>${item.name} × ${item.qty}</h4>
+              <p>${item.price}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>${formatPrice(totals.subtotal)}</span>
+      </div>
+      <div class="summary-row">
+        <span>GST</span>
+        <span>${formatPrice(totals.totalGst)}</span>
+      </div>
+      <div class="summary-row">
+        <span>Delivery</span>
+        <span>${formatPrice(totals.totalDelivery)}</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span style="color: var(--accent);">${formatPrice(totals.total)}</span>
+      </div>
+    `;
+  }
+  window.renderCheckoutSummary = renderCheckoutSummary;
+
+  function placeOrder() {
+    const firstName = document.getElementById('first-name').value;
+    const lastName = document.getElementById('last-name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const zip = document.getElementById('zip').value;
+    const country = document.getElementById('country').value;
+
+    const order = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      customer: {
+        firstName, lastName, email, phone, address, city, state, zip, country
+      },
+      items: [...cart],
+      totals: calculateCartTotals(),
+      status: 'pending'
+    };
+
+    // Save order
+    let orders = [];
+    try {
+      orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    } catch {}
+    orders.push(order);
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+
+    // Clear cart
+    cart = [];
+    saveCart();
+
+    showToast('Order placed successfully!');
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 1500);
+  }
+  window.placeOrder = placeOrder;
 
   function toggleWishlist(productId, btn) {
     if (wishlist.has(productId)) wishlist.delete(productId);
@@ -377,6 +617,11 @@
     window.saveProducts = saveProducts;
     window.renderWishlist = renderWishlist;
     window.updateWishlistBadge = updateWishlistBadge;
+    window.renderCart = renderCart;
+    window.renderCheckoutSummary = renderCheckoutSummary;
+    window.updateCartItemQty = updateCartItemQty;
+    window.removeFromCart = removeFromCart;
+    window.placeOrder = placeOrder;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
