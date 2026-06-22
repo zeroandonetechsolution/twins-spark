@@ -85,6 +85,11 @@
           <span data-icon="cart"></span>
           <span class="cart-badge" data-cart-count>0</span>
         </a>
+        <!-- User Profile -->
+        <a href="login.html" class="icon-btn" aria-label="User Profile" data-user-avatar></a>
+        <button type="button" class="icon-btn" data-logout-btn aria-label="Logout" onclick="logout()" style="display: none;">
+          <span data-icon="close"></span>
+        </button>
         <button type="button" class="icon-btn menu-btn" id="menu-toggle" aria-label="Open menu">
           <span data-icon="menu"></span>
         </button>
@@ -115,7 +120,7 @@
         
         <!-- Google Sign-In Button -->
         <div id="g_id_onload"
-             data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+             data-client_id="572682440348-vfaaljc997ee9q3175i3rj3155lvs13t.apps.googleusercontent.com"
              data-context="signin"
              data-ux_mode="popup"
              data-callback="handleGoogleSignIn"
@@ -123,9 +128,7 @@
         </div>
         <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
         
-        <p style="text-align: center; color: rgba(255,255,255,0.5); margin-top: 1.5rem; font-size: 0.875rem;">
-          You need to replace <strong>YOUR_GOOGLE_CLIENT_ID</strong> with your actual Google Client ID
-        </p>
+
       </div>
     </section>
   </main>

@@ -637,6 +637,8 @@
   // ── Init ──────────────────────────────────────────────
 
   function init() {
+  // Clear old skipped login flag (if any)
+  localStorage.removeItem('twinsSparkLoginSkipped');
   loadUser();
   loadCart();
   loadWishlist();
@@ -668,9 +670,8 @@ function initLoginPopup() {
   
   if (!popup || !document.body.classList.contains('page-home')) return;
 
-  // Only show popup if user is not logged in and hasn't skipped before
-  const hasSkipped = localStorage.getItem('twinsSparkLoginSkipped');
-  if (!currentUser && !hasSkipped) {
+  // Show popup every time if user is not logged in (after preloader)
+  if (!currentUser) {
     // Show popup after preloader is done (about 5 seconds)
     setTimeout(() => {
       openLoginPopup();
@@ -702,7 +703,6 @@ function closeLoginPopup() {
   if (!popup) return;
   popup.classList.remove('is-open');
   popup.setAttribute('aria-hidden', 'true');
-  localStorage.setItem('twinsSparkLoginSkipped', 'true');
 }
 
 // Google Sign-In callback (needs to be global for Google's library)
