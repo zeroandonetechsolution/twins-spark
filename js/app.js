@@ -259,6 +259,19 @@
   }
 
   function addToCart(productId, options = null) {
+    // Check if user is logged in
+    if (!currentUser) {
+      // Try to open login popup if on home page
+      if (document.body.classList.contains('page-home') && window.openLoginPopup) {
+        openLoginPopup();
+      } else {
+        // Redirect to login page
+        window.location.href = 'login.html';
+      }
+      showToast('Please login first!');
+      return;
+    }
+
     const product = (window.PRODUCTS || []).find((p) => p.id === productId);
     if (!product) return;
 
@@ -290,11 +303,18 @@
     }
 
     saveCart();
-    showToast(`${product.name} added to cart`);
+    showToast('Added to cart!');
   }
   window.addToCart = addToCart;
 
   function updateCartItemQty(index, qty) {
+    // Check if user is logged in
+    if (!currentUser) {
+      window.location.href = 'login.html';
+      showToast('Please login first!');
+      return;
+    }
+
     if (qty < 1) {
       removeFromCart(index);
       return;
@@ -306,6 +326,13 @@
   window.updateCartItemQty = updateCartItemQty;
 
   function removeFromCart(index) {
+    // Check if user is logged in
+    if (!currentUser) {
+      window.location.href = 'login.html';
+      showToast('Please login first!');
+      return;
+    }
+
     cart.splice(index, 1);
     saveCart();
     renderCart();
@@ -469,6 +496,13 @@
   window.renderCheckoutSummary = renderCheckoutSummary;
 
   function placeOrder() {
+    // Check if user is logged in
+    if (!currentUser) {
+      window.location.href = 'login.html';
+      showToast('Please login first!');
+      return;
+    }
+
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
     const email = document.getElementById('email').value;
@@ -511,6 +545,19 @@
   window.placeOrder = placeOrder;
 
   function toggleWishlist(productId, btn) {
+    // Check if user is logged in
+    if (!currentUser) {
+      // Try to open login popup if on home page
+      if (document.body.classList.contains('page-home') && window.openLoginPopup) {
+        openLoginPopup();
+      } else {
+        // Redirect to login page
+        window.location.href = 'login.html';
+      }
+      showToast('Please login first!');
+      return;
+    }
+
     if (wishlist.has(productId)) wishlist.delete(productId);
     else wishlist.add(productId);
     saveWishlist();
@@ -640,6 +687,17 @@
   // Clear old skipped login flag (if any)
   localStorage.removeItem('twinsSparkLoginSkipped');
   loadUser();
+
+  // Check if current page is protected
+  const currentPath = window.location.pathname;
+  const protectedPages = ['/cart.html', '/checkout.html', '/wishlist.html'];
+  const isProtectedPage = protectedPages.some(page => currentPath.endsWith(page));
+  
+  if (isProtectedPage && !currentUser) {
+    window.location.href = 'login.html';
+    return;
+  }
+
   loadCart();
   loadWishlist();
   loadProducts();
