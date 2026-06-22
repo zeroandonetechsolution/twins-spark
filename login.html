@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Twins Spark</title>
+  <meta name="description" content="Login to Twins Spark">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .login-container {
+      min-height: calc(100vh - 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .login-card {
+      max-width: 400px;
+      width: 100%;
+      padding: 3rem 2rem;
+    }
+    .login-title {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: #fff;
+      color: #1f1f1f;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .google-btn:hover {
+      background: #f5f5f5;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .google-icon {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+  <!-- Google Sign-In Library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div id="smoke-container" class="smoke-container" aria-hidden="true">
+    <div class="smoke-blob smoke-blob-1"></div>
+    <div class="smoke-blob smoke-blob-2"></div>
+    <div id="smoke-particles"></div>
+    <div class="smoke-noise-overlay"></div>
+  </div>
+
+  <nav class="navbar glass" aria-label="Main navigation">
+    <div class="container navbar-inner">
+      <a href="index.html" class="logo" aria-label="Twins Spark Home">
+        <img src="assets/logo.png" alt="Twins Spark" class="logo-img">
+        <span class="logo-text">Twins Spark</span>
+      </a>
+      <div class="nav-links">
+        <a href="gifts.html">Gifts</a>
+        <a href="toys.html">Toys</a>
+        <a href="accessories.html">Accessories</a>
+        <a href="clothing.html">Clothing</a>
+      </div>
+      <div class="nav-actions">
+        <button type="button" class="icon-btn" data-search-toggle aria-label="Search">
+          <span data-icon="search"></span>
+        </button>
+        <a href="wishlist.html" class="icon-btn" aria-label="Wishlist">
+          <span data-icon="heart"></span>
+          <span class="cart-badge" data-wishlist-count>0</span>
+        </a>
+        <a href="cart.html" class="icon-btn cart-btn" aria-label="Shopping cart">
+          <span data-icon="cart"></span>
+          <span class="cart-badge" data-cart-count>0</span>
+        </a>
+        <button type="button" class="icon-btn menu-btn" id="menu-toggle" aria-label="Open menu">
+          <span data-icon="menu"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="mobile-menu-overlay" class="mobile-menu-overlay" aria-hidden="true"></div>
+  <aside id="mobile-menu" class="mobile-menu glass-premium" aria-hidden="true">
+    <button type="button" id="mobile-menu-close" class="mobile-menu-close" aria-label="Close menu">
+      <span data-icon="close"></span>
+    </button>
+    <nav>
+      <a href="gifts.html">Gifts</a>
+      <a href="toys.html">Toys</a>
+      <a href="accessories.html">Accessories</a>
+      <a href="clothing.html">Clothing</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="login-container">
+      <div class="card login-card glass">
+        <h1 class="login-title">Welcome to Twins Spark</h1>
+        <p style="text-align: center; color: rgba(255,255,255,0.7); margin-bottom: 2rem;">Sign in to continue</p>
+        
+        <!-- Google Sign-In Button -->
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleGoogleSignIn"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+        
+        <p style="text-align: center; color: rgba(255,255,255,0.5); margin-top: 1.5rem; font-size: 0.875rem;">
+          You need to replace <strong>YOUR_GOOGLE_CLIENT_ID</strong> with your actual Google Client ID
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer glass">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo" aria-label="Twins Spark Home">
+            <img src="assets/logo.png" alt="Twins Spark" class="logo-img">
+            <span class="logo-text">Twins Spark</span>
+          </a>
+          <p>
+            Elevating the ordinary into the extraordinary with cosmic-inspired gifts,
+            accessories, and apparel.
+          </p>
+        </div>
+
+        <div>
+          <h4>SHOP</h4>
+          <ul>
+            <li><a href="clothing.html">Clothing</a></li>
+            <li><a href="gifts.html">Gifts</a></li>
+            <li><a href="#">Custom Gifts</a></li>
+            <li><a href="#">New Arrivals</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>LEGAL</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="data-safety.html">Data Safety</a></li>
+            <li><a href="admin.html">Admin Panel</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          <p>&copy; <span data-year></span> Twins Spark. All Rights Reserved.</p>
+        </div>
+        <div class="powered-section">
+          <h5>Powered and Protected By</h5>
+          <div class="powered-logos">
+            <div class="powered-logo-item">
+              <img src="assets/zero and one.png" alt="Zero & One Tech Solution Pvt Ltd" class="powered-logo">
+              <span>Zero & One Tech Solution Pvt Ltd</span>
+            </div>
+            <div class="powered-logo-item">
+              <img src="assets/SJ.png" alt="Security Junction Pvt Ltd" class="powered-logo">
+              <span>Security Junction Pvt Ltd</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/icons.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Handle Google Sign-In callback
+    window.handleGoogleSignIn = function(response) {
+      try {
+        // Decode the JWT token to get user info
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        const user = {
+          name: payload.name,
+          email: payload.email,
+          picture: payload.picture
+        };
+        setUser(user);
+        showToast('Welcome, ' + user.name + '!');
+        // Redirect to home page after login
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1000);
+      } catch (error) {
+        console.error('Login error:', error);
+        showToast('Login failed. Please try again.');
+      }
+    };
+
+    // Check if user is already logged in
+    document.addEventListener('DOMContentLoaded', function() {
+      if (currentUser) {
+        window.location.href = 'index.html';
+      }
+    });
+
+    document.querySelectorAll('[data-icon]').forEach(function (el) {
+      var name = el.getAttribute('data-icon');
+      if (window.ICONS && window.ICONS[name]) el.innerHTML = window.ICONS[name];
+    });
+  </script>
+</body>
+</html>

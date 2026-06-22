@@ -62,22 +62,14 @@
     <div class="preloader-vignette" aria-hidden="true"></div>
     <div class="preloader-inner">
       <div class="preloader-logo-wrap">
-        <div class="preloader-glow" aria-hidden="true"></div>
-        <div class="miracle-flow-wrap">
-          <div class="miracle-mist miracle-mist-1" aria-hidden="true"></div><div class="miracle-mist miracle-mist-2" aria-hidden="true"></div><div class="miracle-mist miracle-mist-3" aria-hidden="true"></div>
-          <div class="miracle-light-core" aria-hidden="true"></div>
-          <div class="miracle-logo-wrapper"><img src="assets/logo.png" alt="Twins Spark" class="preloader-logo" /></div>
-          <div class="miracle-particles" aria-hidden="true">
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-          </div>
-        </div>
+        <video 
+          src="assets/ts finished title.mp4" 
+          autoplay 
+          muted 
+          loop 
+          playsinline
+          style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;"
+        ></video>
       </div>
     </div>
   </div>
@@ -107,6 +99,11 @@
           <span data-icon="cart"></span>
           <span class="cart-badge" data-cart-count>0</span>
         </a>
+        <!-- User Profile -->
+        <a href="login.html" class="icon-btn" aria-label="User Profile" data-user-avatar></a>
+        <button type="button" class="icon-btn" data-logout-btn aria-label="Logout" onclick="logout()" style="display: none;">
+          <span data-icon="close"></span>
+        </button>
         <button type="button" class="icon-btn menu-btn" id="menu-toggle" aria-label="Open menu">
           <span data-icon="menu"></span>
         </button>

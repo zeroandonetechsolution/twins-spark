@@ -2,12 +2,78 @@
   'use strict';
 
   const PARTICLE_COUNT = 3;
-  const CART_KEY = 'twins_spark_cart';
-  const WISHLIST_KEY = 'twins_spark_wishlist';
-  const ORDERS_KEY = 'twins_spark_orders';
-
+  const USER_KEY = 'twins_spark_user';
+  
+  let currentUser = null;
   let cart = [];
   let wishlist = new Set();
+
+  // Helper to get user-specific storage keys
+  function getStorageKey(baseKey) {
+    if (!currentUser) return baseKey;
+    return `${baseKey}_${currentUser.email.replace(/[^a-zA-Z0-9]/g, '_')}`;
+  }
+
+  // User session management
+  function setUser(user) {
+    currentUser = user;
+    if (user) {
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+    } else {
+      localStorage.removeItem(USER_KEY);
+    }
+    // Reload data for new user
+    loadCart();
+    loadWishlist();
+    updateCartBadge();
+    updateWishlistBadge();
+    updateUserUI();
+  }
+
+  function loadUser() {
+    try {
+      currentUser = JSON.parse(localStorage.getItem(USER_KEY));
+    } catch {
+      currentUser = null;
+    }
+  }
+
+  function logout() {
+    setUser(null);
+    window.location.href = 'login.html';
+  }
+  window.logout = logout;
+
+  function updateUserUI() {
+    // Update user profile button in navbar
+    document.querySelectorAll('[data-user-avatar]').forEach(el => {
+      if (currentUser && currentUser.picture) {
+        el.innerHTML = `<img src="${currentUser.picture}" alt="${currentUser.name}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">`;
+      } else {
+        el.innerHTML = `<span data-icon="heart" style="font-size: 24px;"></span>`;
+      }
+    });
+
+    document.querySelectorAll('[data-user-name]').forEach(el => {
+      el.textContent = currentUser ? currentUser.name : '';
+    });
+
+    // Show/hide logout button
+    document.querySelectorAll('[data-logout-btn]').forEach(el => {
+      el.style.display = currentUser ? 'inline-flex' : 'none';
+    });
+  }
+
+  function handleUserProfileClick() {
+    if (currentUser) {
+      // If user is logged in, you could add a profile dropdown here
+      showToast('You are logged in as ' + currentUser.name);
+    } else {
+      // If not logged in, open the login popup
+      openLoginPopup();
+    }
+  }
+  window.handleUserProfileClick = handleUserProfileClick;
 
   // Helper function to parse price string (e.g., "₹2,999" → 2999)
   function parsePrice(priceStr) {
@@ -24,27 +90,31 @@
 
   function loadCart() {
     try {
-      cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      const key = getStorageKey('twins_spark_cart');
+      cart = JSON.parse(localStorage.getItem(key)) || [];
     } catch {
       cart = [];
     }
   }
 
   function saveCart() {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    const key = getStorageKey('twins_spark_cart');
+    localStorage.setItem(key, JSON.stringify(cart));
     updateCartBadge();
   }
 
   function loadWishlist() {
     try {
-      wishlist = new Set(JSON.parse(localStorage.getItem(WISHLIST_KEY)) || []);
+      const key = getStorageKey('twins_spark_wishlist');
+      wishlist = new Set(JSON.parse(localStorage.getItem(key)) || []);
     } catch {
       wishlist = new Set();
     }
   }
 
   function saveWishlist() {
-    localStorage.setItem(WISHLIST_KEY, JSON.stringify([...wishlist]));
+    const key = getStorageKey('twins_spark_wishlist');
+    localStorage.setItem(key, JSON.stringify([...wishlist]));
   }
 
   function loadProducts() {
@@ -402,11 +472,11 @@
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
     const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
     const city = document.getElementById('city').value;
     const state = document.getElementById('state').value;
     const zip = document.getElementById('zip').value;
+    const phone = document.getElementById('phone').value;
     const country = document.getElementById('country').value;
 
     const order = {
@@ -422,11 +492,12 @@
 
     // Save order
     let orders = [];
+    const key = getStorageKey('twins_spark_orders');
     try {
-      orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+      orders = JSON.parse(localStorage.getItem(key)) || [];
     } catch {}
     orders.push(order);
-    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+    localStorage.setItem(key, JSON.stringify(orders));
 
     // Clear cart
     cart = [];
@@ -566,26 +637,92 @@
   // ── Init ──────────────────────────────────────────────
 
   function init() {
-    loadCart();
-    loadWishlist();
-    loadProducts();
-    initPreloader();
-    initSmoke();
-    initMobileMenu();
-    initNewsletter();
-    initSearch();
-    setYear();
-    updateCartBadge();
-    updateWishlistBadge();
+  loadUser();
+  loadCart();
+  loadWishlist();
+  loadProducts();
+  initPreloader();
+  initSmoke();
+  initMobileMenu();
+  initNewsletter();
+  initSearch();
+  setYear();
+  updateCartBadge();
+  updateWishlistBadge();
+  updateUserUI();
+  initLoginPopup();
 
-    if (document.body.dataset.category) {
-      initCategoryPage();
-    } else if (document.body.classList.contains('page-home')) {
-      initHomePage();
-    } else if (document.getElementById('product-grid')) {
-      renderProducts(window.PRODUCTS || []);
-    }
+  if (document.body.dataset.category) {
+    initCategoryPage();
+  } else if (document.body.classList.contains('page-home')) {
+    initHomePage();
+  } else if (document.getElementById('product-grid')) {
+    renderProducts(window.PRODUCTS || []);
   }
+}
+
+// Login popup logic
+function initLoginPopup() {
+  const popup = document.getElementById('login-popup');
+  const closeBtn = document.getElementById('close-login-popup');
+  
+  if (!popup || !document.body.classList.contains('page-home')) return;
+
+  // Only show popup if user is not logged in and hasn't skipped before
+  const hasSkipped = localStorage.getItem('twinsSparkLoginSkipped');
+  if (!currentUser && !hasSkipped) {
+    // Show popup after preloader is done (about 5 seconds)
+    setTimeout(() => {
+      openLoginPopup();
+    }, 5000);
+  }
+
+  // Close popup on close button click
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeLoginPopup);
+  }
+
+  // Close popup on overlay click
+  popup.addEventListener('click', (e) => {
+    if (e.target === popup) {
+      closeLoginPopup();
+    }
+  });
+}
+
+function openLoginPopup() {
+  const popup = document.getElementById('login-popup');
+  if (!popup) return;
+  popup.classList.add('is-open');
+  popup.setAttribute('aria-hidden', 'false');
+}
+
+function closeLoginPopup() {
+  const popup = document.getElementById('login-popup');
+  if (!popup) return;
+  popup.classList.remove('is-open');
+  popup.setAttribute('aria-hidden', 'true');
+  localStorage.setItem('twinsSparkLoginSkipped', 'true');
+}
+
+// Google Sign-In callback (needs to be global for Google's library)
+window.handleGoogleSignIn = function(response) {
+  try {
+    // Decode the JWT token to get user info
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    const user = {
+      name: payload.name,
+      email: payload.email,
+      picture: payload.picture
+    };
+    setUser(user);
+    closeLoginPopup();
+    showToast('Welcome, ' + user.name + '!');
+  } catch (error) {
+    console.error('Login error:', error);
+    showToast('Login failed. Please try again.');
+  }
+};
 
   function initHomePage() {
     const trending = (window.PRODUCTS || []).filter((p) => p.trending);

@@ -7,6 +7,8 @@
   <meta name="description" content="Discover valuable gifts, accessories, toys, and clothing in our cosmic boutique." />
   <link rel="icon" href="assets/logo.png" type="image/png" />
   <link rel="stylesheet" href="css/style.css" />
+  <!-- Google Sign-In Library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="page-home">
   <!-- Preloader -->
@@ -14,26 +16,14 @@
     <div class="preloader-vignette" aria-hidden="true"></div>
     <div class="preloader-inner">
       <div class="preloader-logo-wrap">
-        <div class="preloader-glow" aria-hidden="true"></div>
-        <div class="miracle-flow-wrap">
-          <div class="miracle-mist miracle-mist-1" aria-hidden="true"></div>
-          <div class="miracle-mist miracle-mist-2" aria-hidden="true"></div>
-          <div class="miracle-mist miracle-mist-3" aria-hidden="true"></div>
-          <div class="miracle-light-core" aria-hidden="true"></div>
-          <div class="miracle-logo-wrapper">
-            <img src="assets/logo.png" alt="Twins Spark" class="preloader-logo" />
-          </div>
-          <div class="miracle-particles" aria-hidden="true">
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-            <span class="m-particle"></span>
-          </div>
-        </div>
+        <video 
+          src="assets/ts finished title.mp4" 
+          autoplay 
+          muted 
+          loop 
+          playsinline
+          style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;"
+        ></video>
       </div>
     </div>
   </div>
@@ -53,6 +43,29 @@
         <feDisplacementMap in="SourceGraphic" scale="100" />
       </filter>
     </svg>
+  </div>
+
+  <!-- Login Popup -->
+  <div id="login-popup" class="login-popup-overlay" aria-hidden="true">
+    <div class="login-popup glass-premium">
+      <button id="close-login-popup" class="popup-close-btn" aria-label="Close login popup">
+        <span data-icon="close"></span>
+      </button>
+      <div class="popup-logo">
+        <img src="assets/logo.png" alt="Twins Spark" />
+      </div>
+      <h2 class="popup-title">Welcome to Twins Spark!</h2>
+      <p class="popup-subtitle">Sign in to get your personalized experience</p>
+      <div id="g_id_onload"
+           data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+           data-context="signin"
+           data-ux_mode="popup"
+           data-callback="handleGoogleSignIn"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+      <p class="popup-skip" onclick="closeLoginPopup()">Skip for now</p>
+    </div>
   </div>
 
   <!-- Navbar -->
@@ -82,6 +95,11 @@
           <span data-icon="cart"></span>
           <span class="cart-badge" data-cart-count>0</span>
         </a>
+        <!-- User Profile -->
+        <button type="button" class="icon-btn" aria-label="User Profile" data-user-avatar onclick="handleUserProfileClick()"></button>
+        <button type="button" class="icon-btn" data-logout-btn aria-label="Logout" onclick="logout()" style="display: none;">
+          <span data-icon="close"></span>
+        </button>
         <button type="button" class="icon-btn menu-btn" id="menu-toggle" aria-label="Open menu">
           <span data-icon="menu"></span>
         </button>
