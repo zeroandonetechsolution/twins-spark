@@ -1,0 +1,16 @@
+# robots.txt for Twins Spark
+# Last updated: 2026-06-22
+
+# Allow all user agents
+User-agent: *
+Allow: /
+
+# Disallow private pages
+Disallow: /admin.html
+Disallow: /checkout.html
+Disallow: /cart.html
+Disallow: /wishlist.html
+Disallow: /login.html
+
+# Sitemap location
+Sitemap: https://twinssparks.com/sitemap.xml
